@@ -783,6 +783,90 @@ int main(int argc, char *argv[])
 
                     }
 
+                case SDL_MOUSEBUTTONDOWN:
+                
+                    if(event.button.x >= 473 && event.button.x <= 525 && event.button.y <= 654 && event.button.y >= 601){
+
+                        FMOD_System_GetMasterChannelGroup(system, &canal);
+                        FMOD_ChannelGroup_GetPaused(canal, &etat);
+
+                        if (etat){
+                            // If the song is in pause
+
+                             k = 0;
+
+                            image = IMG_Load(etat_musique_[k]);
+
+                            if(image == NULL){
+                                SDL_DestroyRenderer(renderer);
+                                SDL_DestroyWindow(window);
+                                SDL_ExitWithError("Impossible to load the picture");
+                            }        
+
+                            texture = SDL_CreateTextureFromSurface(renderer, image);
+                            SDL_FreeSurface(image);
+
+                            if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
+                                SDL_DestroyRenderer(renderer);
+                                SDL_DestroyWindow(window);
+                                SDL_ExitWithError("Impossible to load the texture");
+                            }
+
+                            rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
+                            rectangle.y = 600;
+
+                            if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
+                                SDL_DestroyRenderer(renderer);
+                                SDL_DestroyWindow(window);
+                                SDL_ExitWithError("Impossible to display the texture");
+                            }
+
+                            SDL_RenderPresent(renderer);
+
+                            FMOD_ChannelGroup_SetPaused(canal, 0); // We remove the pause
+                            
+                        }else{
+                            // Otherwise, it is in play
+
+                            k = 1;
+
+                            image = IMG_Load(etat_musique_[k]);
+
+                            if(image == NULL){
+                                SDL_DestroyRenderer(renderer);
+                                SDL_DestroyWindow(window);
+                                SDL_ExitWithError("Impossible to load the picture");
+                            }        
+
+                            texture = SDL_CreateTextureFromSurface(renderer, image);
+                            SDL_FreeSurface(image);
+
+                            if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
+                                SDL_DestroyRenderer(renderer);
+                                SDL_DestroyWindow(window);
+                                SDL_ExitWithError("Impossible to load the texture");
+                            }
+
+                            rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
+                            rectangle.y = 600;
+
+                            if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
+                                SDL_DestroyRenderer(renderer);
+                                SDL_DestroyWindow(window);
+                                SDL_ExitWithError("Impossible to display the texture");
+                            }
+
+                            SDL_RenderPresent(renderer);
+
+                            FMOD_ChannelGroup_SetPaused(canal, 1); // We activate the pause
+                            printf("\n Music is paused\n");
+
+                        }
+
+                    }
+                    
+                    continue;
+
                 case SDL_QUIT: // If click on the button to close the window
                     program_launched = SDL_FALSE; // Close the window
                     break;
