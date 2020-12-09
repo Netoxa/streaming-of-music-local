@@ -783,7 +783,7 @@ int main(int argc, char *argv[])
 
                     }
 
-                case SDL_MOUSEBUTTONDOWN:
+                case SDL_MOUSEBUTTONUP:
                 
                     if(event.button.x >= 473 && event.button.x <= 525 && event.button.y <= 654 && event.button.y >= 601){
 
