@@ -1,1 +1,0 @@
-gcc main.c -o prog -I include -L lib -lmingw32 -lSDL2main -lSDL2 -lfmodex -lSDL2_image -lSDL2_ttf
