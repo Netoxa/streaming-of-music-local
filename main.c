@@ -638,7 +638,6 @@ int main(int argc, char *argv[])
                             SDL_RenderPresent(renderer);
 
                             FMOD_ChannelGroup_SetPaused(canal, 1); // We activate the pause
-                            printf("\n Music is paused\n");
 
                         }
 
