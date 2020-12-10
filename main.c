@@ -334,13 +334,46 @@ void Add_Genre(){
 }
 
 
+void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture){
+
+    char etat_musique[2][16] = {"images/paus.jpg","images/play.jpg"};
+
+    image = IMG_Load(etat_musique[k]);
+
+    if(image == NULL){
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_ExitWithError("Impossible to load the picture");
+    }        
+
+    texture = SDL_CreateTextureFromSurface(renderer, image);
+    SDL_FreeSurface(image);
+
+        if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_ExitWithError("Impossible to load the texture");
+        }
+
+    rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
+    rectangle.y = 600;
+
+        if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_ExitWithError("Impossible to display the texture");
+        }
+
+    SDL_RenderPresent(renderer);
+
+}
+
 int main(int argc, char *argv[])
 {
     SDL_bool program_launched = SDL_TRUE;
     SDL_Event event;
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
-    SDL_Renderer *renderer_etat = NULL;
     SDL_Surface *image = NULL;
     SDL_Surface *texte = NULL;
     SDL_Texture *texture = NULL;
@@ -362,7 +395,6 @@ int main(int argc, char *argv[])
     unsigned int number_music;
     unsigned int i = 0;
     unsigned int j = 0;
-    unsigned int k = 0;
     unsigned int volume_zero = 1;
     float volume = 0.5; 
     char music[255];
@@ -371,7 +403,6 @@ int main(int argc, char *argv[])
     char titre[255];
     char genre[255];
     char ***tab_music;
-    char etat_musique_[2][16] = {"images/paus.jpg","images/play.jpg"};
 
     /* Launch SDL */
     if(SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -463,34 +494,21 @@ int main(int argc, char *argv[])
                 }
 
                 SDL_RenderPresent(renderer);
+
+                FMOD_System_GetMasterChannelGroup(system, &canal);
+                FMOD_ChannelGroup_GetPaused(canal, &etat);
+
+                if (etat){
+
+                    Image_Pause_Start(1, rectangle, window, renderer, image, texture);
+
+                }else{
+
+                    Image_Pause_Start(0, rectangle, window, renderer, image, texture);
+
+                }
                 
-                image = IMG_Load(etat_musique_[k]);
-
-                if(image == NULL){
-                    SDL_DestroyRenderer(renderer);
-                    SDL_DestroyWindow(window);
-                    SDL_ExitWithError("Impossible to load the picture");
-               }
-
-                texture = SDL_CreateTextureFromSurface(renderer, image);
-                SDL_FreeSurface(image);
-
-                if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
-                    SDL_DestroyRenderer(renderer);
-                    SDL_DestroyWindow(window);
-                    SDL_ExitWithError("Impossible to load the texture");
-                }
-
-                rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
-                rectangle.y = 600;
-
-                if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
-                    SDL_DestroyRenderer(renderer);
-                    SDL_DestroyWindow(window);
-                    SDL_ExitWithError("Impossible to display the texture");
-                }
-
-                SDL_RenderPresent(renderer);
+                
 
                 texte = TTF_RenderText_Blended(police, tab_music[i][2], couleur);
 
@@ -572,71 +590,15 @@ int main(int argc, char *argv[])
                         if (etat){
                             // If the song is in pause
 
-                             k = 0;
-
-                            image = IMG_Load(etat_musique_[k]);
-
-                            if(image == NULL){
-                                SDL_DestroyRenderer(renderer);
-                                SDL_DestroyWindow(window);
-                                SDL_ExitWithError("Impossible to load the picture");
-                            }        
-
-                            texture = SDL_CreateTextureFromSurface(renderer, image);
-                            SDL_FreeSurface(image);
-
-                            if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
-                                SDL_DestroyRenderer(renderer);
-                                SDL_DestroyWindow(window);
-                                SDL_ExitWithError("Impossible to load the texture");
-                            }
-
-                            rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
-                            rectangle.y = 600;
-
-                            if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
-                                SDL_DestroyRenderer(renderer);
-                                SDL_DestroyWindow(window);
-                                SDL_ExitWithError("Impossible to display the texture");
-                            }
-
-                            SDL_RenderPresent(renderer);
-
+                            Image_Pause_Start(0, rectangle, window, renderer, image, texture);
+                            
                             FMOD_ChannelGroup_SetPaused(canal, 0); // We remove the pause
                             
                         }else{
                             // Otherwise, it is in play
 
-                            k = 1;
-
-                            image = IMG_Load(etat_musique_[k]);
-
-                            if(image == NULL){
-                                SDL_DestroyRenderer(renderer);
-                                SDL_DestroyWindow(window);
-                                SDL_ExitWithError("Impossible to load the picture");
-                            }        
-
-                            texture = SDL_CreateTextureFromSurface(renderer, image);
-                            SDL_FreeSurface(image);
-
-                            if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
-                                SDL_DestroyRenderer(renderer);
-                                SDL_DestroyWindow(window);
-                                SDL_ExitWithError("Impossible to load the texture");
-                            }
-
-                            rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
-                            rectangle.y = 600;
-
-                            if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
-                                SDL_DestroyRenderer(renderer);
-                                SDL_DestroyWindow(window);
-                                SDL_ExitWithError("Impossible to display the texture");
-                            }
-
-                            SDL_RenderPresent(renderer);
-
+                            Image_Pause_Start(1, rectangle, window, renderer, image, texture);
+                            
                             FMOD_ChannelGroup_SetPaused(canal, 1); // We activate the pause
 
                         }
@@ -792,82 +754,26 @@ int main(int argc, char *argv[])
                         if (etat){
                             // If the song is in pause
 
-                             k = 0;
-
-                            image = IMG_Load(etat_musique_[k]);
-
-                            if(image == NULL){
-                                SDL_DestroyRenderer(renderer);
-                                SDL_DestroyWindow(window);
-                                SDL_ExitWithError("Impossible to load the picture");
-                            }        
-
-                            texture = SDL_CreateTextureFromSurface(renderer, image);
-                            SDL_FreeSurface(image);
-
-                            if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
-                                SDL_DestroyRenderer(renderer);
-                                SDL_DestroyWindow(window);
-                                SDL_ExitWithError("Impossible to load the texture");
-                            }
-
-                            rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
-                            rectangle.y = 600;
-
-                            if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
-                                SDL_DestroyRenderer(renderer);
-                                SDL_DestroyWindow(window);
-                                SDL_ExitWithError("Impossible to display the texture");
-                            }
-
-                            SDL_RenderPresent(renderer);
-
+                            Image_Pause_Start(0, rectangle, window, renderer, image, texture);
+        
                             FMOD_ChannelGroup_SetPaused(canal, 0); // We remove the pause
                             
                         }else{
                             // Otherwise, it is in play
 
-                            k = 1;
-
-                            image = IMG_Load(etat_musique_[k]);
-
-                            if(image == NULL){
-                                SDL_DestroyRenderer(renderer);
-                                SDL_DestroyWindow(window);
-                                SDL_ExitWithError("Impossible to load the picture");
-                            }        
-
-                            texture = SDL_CreateTextureFromSurface(renderer, image);
-                            SDL_FreeSurface(image);
-
-                            if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
-                                SDL_DestroyRenderer(renderer);
-                                SDL_DestroyWindow(window);
-                                SDL_ExitWithError("Impossible to load the texture");
-                            }
-
-                            rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
-                            rectangle.y = 600;
-
-                            if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
-                                SDL_DestroyRenderer(renderer);
-                                SDL_DestroyWindow(window);
-                                SDL_ExitWithError("Impossible to display the texture");
-                            }
-
-                            SDL_RenderPresent(renderer);
-
+                            Image_Pause_Start(1, rectangle, window, renderer, image, texture);
+                        
                             FMOD_ChannelGroup_SetPaused(canal, 1); // We activate the pause
-                            printf("\n Music is paused\n");
 
-                        }
-
+                        } 
                     }
-                    
+
                     continue;
 
                 case SDL_QUIT: // If click on the button to close the window
+
                     program_launched = SDL_FALSE; // Close the window
+
                     break;
 
                 default:
