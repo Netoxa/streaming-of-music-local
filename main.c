@@ -478,8 +478,6 @@ int main(int argc, char *argv[])
     printf("\n Restart the music list : m");
     printf("\n Pause / Replay : space ");
     printf("\n Replay the music a the begin : r");
-    printf("\n Go to the next music : n");
-    printf("\n Go to the previous  music : v");
     printf("\n Shuffle the music list : j");
     printf("\n Lower the volume : l");
     printf("\n Turn up the sound : q");
@@ -673,19 +671,6 @@ int main(int argc, char *argv[])
 
                         continue;
 
-                    case SDLK_n:
-
-                        if(i < number_music){
-
-                            change_something = 1; // Go to the next music
-    
-                        }else{
-
-                            printf("\n List of musics is finished");
-
-                        }
-
-                        continue;
 
                     case SDLK_m:
 
@@ -694,23 +679,7 @@ int main(int argc, char *argv[])
             
                         continue;
 
-                    case SDLK_v:
-
-                        if(i == 1){
-
-                            i--; // If it's the first music that plays
-                            change_something = 1;
-
-                        }
-
-                        if(i > 1){
-
-                            i = i - 2; // If it's another music that plays
-                            change_something = 1;
-
-                        }
-
-                        continue;
+                    
 
                     case SDLK_j:
 
@@ -771,7 +740,6 @@ int main(int argc, char *argv[])
                         }
                     
                     continue;
-
                     case SDLK_o:
 
                         Add_Music();
