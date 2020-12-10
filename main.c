@@ -369,6 +369,49 @@ void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Render
 
 }
 
+void Image_Next_Previous(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture){
+
+    char previous_next[2][20] = {"images/previous.jpg","images/next.jpg"};
+    unsigned int i;
+    unsigned int position = 280;
+
+
+    for(i = 0; i < 2; i++){
+
+    image = IMG_Load(previous_next[i]);
+
+    if(image == NULL){
+        SDL_DestroyRenderer(renderer);
+        SDL_DestroyWindow(window);
+        SDL_ExitWithError("Impossible to load the picture");
+    }        
+
+    texture = SDL_CreateTextureFromSurface(renderer, image);
+    SDL_FreeSurface(image);
+
+        if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_ExitWithError("Impossible to load the texture");
+        }
+
+    rectangle.x = position;
+    rectangle.y = 600;
+
+        if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_ExitWithError("Impossible to display the texture");
+        }
+
+    SDL_RenderPresent(renderer);
+
+    position = 670;
+
+    }
+
+}
+
 int main(int argc, char *argv[])
 {
     SDL_bool program_launched = SDL_TRUE;
@@ -508,6 +551,8 @@ int main(int argc, char *argv[])
                     Image_Pause_Start(0, rectangle, window, renderer, image, texture);
 
                 }
+
+                Image_Next_Previous(rectangle, window, renderer, image, texture);
                 
                 texte = TTF_RenderText_Blended(police, tab_music[i][2], couleur);
 
@@ -766,11 +811,12 @@ int main(int argc, char *argv[])
                         
                                 FMOD_ChannelGroup_SetPaused(canal, 1); // We activate the pause
 
-                        } 
+                        }
+
                     }
                 }
 
-                    break;
+                    continue;
                 
                 case SDL_QUIT: // If click on the button to close the window
 
