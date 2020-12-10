@@ -21,6 +21,7 @@ void Add_Image();
 void Add_Artist();
 void Add_Title();
 void Add_Genre();
+void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
 
 void SDL_ExitWithError(const char *message){
     
@@ -508,8 +509,6 @@ int main(int argc, char *argv[])
 
                 }
                 
-                
-
                 texte = TTF_RenderText_Blended(police, tab_music[i][2], couleur);
 
                  if(texte == NULL){
@@ -745,31 +744,34 @@ int main(int argc, char *argv[])
                     }
 
                 case SDL_MOUSEBUTTONUP:
+
+                    if (event.button.button == SDL_BUTTON_LEFT){
                 
-                    if(event.button.x >= 473 && event.button.x <= 525 && event.button.y <= 654 && event.button.y >= 601){
+                        if(event.button.x >= 473 && event.button.x <= 525 && event.button.y <= 654 && event.button.y >= 601){
 
-                        FMOD_System_GetMasterChannelGroup(system, &canal);
-                        FMOD_ChannelGroup_GetPaused(canal, &etat);
+                            FMOD_System_GetMasterChannelGroup(system, &canal);
+                            FMOD_ChannelGroup_GetPaused(canal, &etat);
 
-                        if (etat){
-                            // If the song is in pause
+                            if (etat){
+                                // If the song is in pause
 
-                            Image_Pause_Start(0, rectangle, window, renderer, image, texture);
+                                Image_Pause_Start(0, rectangle, window, renderer, image, texture);
         
-                            FMOD_ChannelGroup_SetPaused(canal, 0); // We remove the pause
+                                FMOD_ChannelGroup_SetPaused(canal, 0); // We remove the pause
                             
-                        }else{
-                            // Otherwise, it is in play
+                            }else{
+                                // Otherwise, it is in play
 
-                            Image_Pause_Start(1, rectangle, window, renderer, image, texture);
+                                Image_Pause_Start(1, rectangle, window, renderer, image, texture);
                         
-                            FMOD_ChannelGroup_SetPaused(canal, 1); // We activate the pause
+                                FMOD_ChannelGroup_SetPaused(canal, 1); // We activate the pause
 
                         } 
                     }
+                }
 
-                    continue;
-
+                    break;
+                
                 case SDL_QUIT: // If click on the button to close the window
 
                     program_launched = SDL_FALSE; // Close the window
@@ -807,4 +809,4 @@ int main(int argc, char *argv[])
 
     return EXIT_SUCCESS;
 
-    }
+}
