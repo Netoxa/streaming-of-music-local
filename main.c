@@ -824,7 +824,7 @@ int main(int argc, char *argv[])
                     }
 
                     if(event.button.x >= 560 && event.button.x <= 610 && event.button.y <= 651 && event.button.y >= 601){ 
-
+                    //mute / demute music
                         if(volume_zero == 1){
 
                              FMOD_Channel_SetVolume(channel, 0);
