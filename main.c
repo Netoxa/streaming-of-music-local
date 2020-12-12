@@ -414,7 +414,7 @@ void Image_Next_Previous(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *r
 
 void Image_Mute_Demute(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, int volume_zero){
 
-    char mute_demute[2][20] = {"images/demute.jpg","images/mute.jpg"};
+    char mute_demute[2][20] = {"images/mute.jpg","images/demute.jpg"};
 
         image = IMG_Load(mute_demute[volume_zero]);
 
@@ -755,27 +755,7 @@ int main(int argc, char *argv[])
 
                         continue;
 
-                    case SDLK_g:
 
-                        if(volume_zero == 1){
-
-                             FMOD_Channel_SetVolume(channel, 0);
-
-                            printf("\n The music is mute");
-
-                             volume_zero = 0;
-
-                        }else{
-
-                             FMOD_Channel_SetVolume(channel, volume);
-
-                             printf("\n The volume is %.0lf", volume * 10);
-
-                             volume_zero = 1;
-
-                        }
-                    
-                    continue;
                     case SDLK_o:
 
                         Add_Music();
@@ -819,7 +799,7 @@ int main(int argc, char *argv[])
 
                     }
 
-                    if(event.button.x >= 280 && event.button.x <= 333 && event.button.y <= 654 && event.button.y >= 601 && number_music != 0){ 
+                    if(event.button.x >= 280 && event.button.x <= 330 && event.button.y <= 651 && event.button.y >= 601 && number_music != 0){ 
                     // previous music
                         if(i == 1){
 
@@ -837,9 +817,31 @@ int main(int argc, char *argv[])
 
                     }
 
-                    if(event.button.x >= 669 && event.button.x <= 722 && event.button.y <= 654 && event.button.y >= 601 && i < number_music){ 
+                    if(event.button.x >= 670 && event.button.x <= 720 && event.button.y <= 651 && event.button.y >= 601 && i < number_music){ 
                     //next music
                         change_something = 1;
+
+                    }
+
+                    if(event.button.x >= 560 && event.button.x <= 610 && event.button.y <= 651 && event.button.y >= 601){ 
+
+                        if(volume_zero == 1){
+
+                             FMOD_Channel_SetVolume(channel, 0);
+
+                             volume_zero = 0;
+
+                        }else{
+
+                             FMOD_Channel_SetVolume(channel, volume);
+
+                             printf("\n The volume is %.0lf", volume * 10);
+
+                             volume_zero = 1;
+
+                        }
+
+                        Image_Mute_Demute(rectangle, window, renderer, image, texture, volume_zero);
 
                     }
 
