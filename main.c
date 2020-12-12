@@ -412,6 +412,40 @@ void Image_Next_Previous(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *r
 
 }
 
+void Image_Mute_Demute(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, int volume_zero){
+
+    char mute_demute[2][20] = {"images/demute.jpg","images/mute.jpg"};
+
+        image = IMG_Load(mute_demute[volume_zero]);
+
+        if(image == NULL){
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_ExitWithError("Impossible to load the picture");
+        }        
+
+        texture = SDL_CreateTextureFromSurface(renderer, image);
+        SDL_FreeSurface(image);
+
+        if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_ExitWithError("Impossible to load the texture");
+        }
+
+        rectangle.x = 560;
+        rectangle.y = 600;
+
+        if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_ExitWithError("Impossible to display the texture");
+        }
+
+        SDL_RenderPresent(renderer);
+
+    }
+
 int main(int argc, char *argv[])
 {
     SDL_bool program_launched = SDL_TRUE;
@@ -551,6 +585,8 @@ int main(int argc, char *argv[])
                 }
 
                 Image_Next_Previous(rectangle, window, renderer, image, texture);
+
+                Image_Mute_Demute(rectangle, window, renderer, image, texture, volume_zero);
                 
                 texte = TTF_RenderText_Blended(police, tab_music[i][2], couleur);
 
@@ -760,7 +796,7 @@ int main(int argc, char *argv[])
 
                     if (event.button.button == SDL_BUTTON_LEFT){
                 
-                        if(event.button.x >= 473 && event.button.x <= 525 && event.button.y <= 654 && event.button.y >= 601){
+                        if(event.button.x >= 475 && event.button.x <= 525 && event.button.y <= 651 && event.button.y >= 601){
 
                             FMOD_System_GetMasterChannelGroup(system, &canal);
                             FMOD_ChannelGroup_GetPaused(canal, &etat);
@@ -783,8 +819,8 @@ int main(int argc, char *argv[])
 
                     }
 
-                    if(event.button.x >= 280 && event.button.x <= 333 && event.button.y <= 654 && event.button.y >= 601 && number_music != 0){ // previous music
-                        
+                    if(event.button.x >= 280 && event.button.x <= 333 && event.button.y <= 654 && event.button.y >= 601 && number_music != 0){ 
+                    // previous music
                         if(i == 1){
 
                             i--; // If it's the first music that plays
@@ -801,8 +837,8 @@ int main(int argc, char *argv[])
 
                     }
 
-                    if(event.button.x >= 669 && event.button.x <= 722 && event.button.y <= 654 && event.button.y >= 601 && i < number_music){ //next music
-                        
+                    if(event.button.x >= 669 && event.button.x <= 722 && event.button.y <= 654 && event.button.y >= 601 && i < number_music){ 
+                    //next music
                         change_something = 1;
 
                     }
