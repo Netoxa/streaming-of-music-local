@@ -22,6 +22,9 @@ void Add_Artist();
 void Add_Title();
 void Add_Genre();
 void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
+void Image_Next_Previous(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
+void Image_Mute_Demute(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, int volume_zero);
+void Image_Down_Turn(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
 
 void SDL_ExitWithError(const char *message){
     
@@ -444,7 +447,52 @@ void Image_Mute_Demute(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *ren
 
         SDL_RenderPresent(renderer);
 
+}
+
+void Image_Down_Turn(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture){
+
+    char previous_next[2][30] = {"images/sound_down.jpg","images/turn_up.jpg"};
+    unsigned int i;
+    unsigned int position = 100;
+
+
+    for(i = 0; i < 2; i++){
+
+        image = IMG_Load(previous_next[i]);
+
+        if(image == NULL){
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_ExitWithError("Impossible to load the picture");
+        }        
+
+        texture = SDL_CreateTextureFromSurface(renderer, image);
+        SDL_FreeSurface(image);
+
+        if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_ExitWithError("Impossible to load the texture");
+        }
+
+        rectangle.x = position;
+        rectangle.y = 600;
+
+        if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_ExitWithError("Impossible to display the texture");
+        }
+
+        SDL_RenderPresent(renderer);
+
+        position = 180;
+
     }
+
+
+
+}
 
 int main(int argc, char *argv[])
 {
@@ -528,129 +576,131 @@ int main(int argc, char *argv[])
 
     while(program_launched){ // As long as the window is displayed
 
-            FMOD_Channel_IsPlaying(channel, &etat_musique); // Check if a music is playing
+        FMOD_Channel_IsPlaying(channel, &etat_musique); // Check if a music is playing
 
-            if((lecture_check == 1 && !etat_musique && i < number_music) || change_something == 1 && lecture_check == 1){
+        if((lecture_check == 1 && !etat_musique && i < number_music) || change_something == 1 && lecture_check == 1){
 
-                resultat = FMOD_System_CreateSound(system, tab_music[i][0] , FMOD_SOFTWARE | FMOD_2D | FMOD_CREATESTREAM, 0, &musique);
+            resultat = FMOD_System_CreateSound(system, tab_music[i][0] , FMOD_SOFTWARE | FMOD_2D | FMOD_CREATESTREAM, 0, &musique);
 
-                // Check if it has been opened and it's not the last music
-                if (resultat != FMOD_OK){
+            // Check if it has been opened and it's not the last music
+            if (resultat != FMOD_OK){
 
-                    SDL_ExitWithError("Impossible to read the music");
-
-                }
-
-                SDL_RenderClear(renderer);
-
-                image = IMG_Load(tab_music[i][1]);
-
-                if(image == NULL){
-                    SDL_DestroyRenderer(renderer);
-                    SDL_DestroyWindow(window);
-                    SDL_ExitWithError("Impossible to load the picture");
-               }
-
-                texture = SDL_CreateTextureFromSurface(renderer, image);
-                SDL_FreeSurface(image);
-
-                if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
-                    SDL_DestroyRenderer(renderer);
-                    SDL_DestroyWindow(window);
-                    SDL_ExitWithError("Impossible to load the texture");
-                }
-
-                rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
-                rectangle.y = 150;
-
-                if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
-                    SDL_DestroyRenderer(renderer);
-                    SDL_DestroyWindow(window);
-                    SDL_ExitWithError("Impossible to display the texture");
-                }
-
-                SDL_RenderPresent(renderer);
-
-                FMOD_System_GetMasterChannelGroup(system, &canal);
-                FMOD_ChannelGroup_GetPaused(canal, &etat);
-
-                if (etat){
-
-                    Image_Pause_Start(1, rectangle, window, renderer, image, texture);
-
-                }else{
-
-                    Image_Pause_Start(0, rectangle, window, renderer, image, texture);
-
-                }
-
-                Image_Next_Previous(rectangle, window, renderer, image, texture);
-
-                Image_Mute_Demute(rectangle, window, renderer, image, texture, volume_zero);
-                
-                texte = TTF_RenderText_Blended(police, tab_music[i][2], couleur);
-
-                 if(texte == NULL){
-                    SDL_DestroyRenderer(renderer);
-                    SDL_DestroyWindow(window);
-                    SDL_ExitWithError("Impossible to load the text");
-               }
-
-                texture = SDL_CreateTextureFromSurface(renderer, texte);
-                SDL_FreeSurface(texte);
-
-                if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
-                    SDL_DestroyRenderer(renderer);
-                    SDL_DestroyWindow(window);
-                    SDL_ExitWithError("Impossible to load the texture");
-                }
-
-                rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
-                rectangle.y = 690;
-
-                if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
-                    SDL_DestroyRenderer(renderer);
-                    SDL_DestroyWindow(window);
-                    SDL_ExitWithError("Impossible to display the texture");
-                }
-
-                SDL_RenderPresent(renderer);
-
-                texte = TTF_RenderText_Blended(police,  tab_music[i][3], couleur);
-
-                 if(texte == NULL){
-                    SDL_DestroyRenderer(renderer);
-                    SDL_DestroyWindow(window);
-                    SDL_ExitWithError("Impossible to load the text");
-               }
-
-                texture = SDL_CreateTextureFromSurface(renderer, texte);
-                SDL_FreeSurface(texte);
-
-                if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
-                    SDL_DestroyRenderer(renderer);
-                    SDL_DestroyWindow(window);
-                    SDL_ExitWithError("Impossible to load the texture");
-                }
-
-                rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
-                rectangle.y = 730;
-
-                if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
-                    SDL_DestroyRenderer(renderer);
-                    SDL_DestroyWindow(window);
-                    SDL_ExitWithError("Impossible to display the texture");
-                }
-
-                SDL_RenderPresent(renderer);
-
-                change_something = 0;
-
-                FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, musique, 0, &channel);
-
-                i++;
+                SDL_ExitWithError("Impossible to read the music");
 
             }
+
+            SDL_RenderClear(renderer);
+
+            image = IMG_Load(tab_music[i][1]);
+
+            if(image == NULL){
+                SDL_DestroyRenderer(renderer);
+                SDL_DestroyWindow(window);
+                SDL_ExitWithError("Impossible to load the picture");
+            }
+
+            texture = SDL_CreateTextureFromSurface(renderer, image);
+            SDL_FreeSurface(image);
+
+            if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
+                SDL_DestroyRenderer(renderer);
+                SDL_DestroyWindow(window);
+                SDL_ExitWithError("Impossible to load the texture");
+            }
+
+            rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
+            rectangle.y = 150;
+
+            if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
+                SDL_DestroyRenderer(renderer);
+                SDL_DestroyWindow(window);
+                SDL_ExitWithError("Impossible to display the texture");
+            }
+
+            SDL_RenderPresent(renderer);
+
+            FMOD_System_GetMasterChannelGroup(system, &canal);
+            FMOD_ChannelGroup_GetPaused(canal, &etat);
+
+            if (etat){
+
+                Image_Pause_Start(1, rectangle, window, renderer, image, texture);
+
+            }else{
+
+                Image_Pause_Start(0, rectangle, window, renderer, image, texture);
+
+            }
+
+            Image_Next_Previous(rectangle, window, renderer, image, texture);
+
+            Image_Mute_Demute(rectangle, window, renderer, image, texture, volume_zero);
+
+            Image_Down_Turn(rectangle, window, renderer, image, texture);
+                
+            texte = TTF_RenderText_Blended(police, tab_music[i][2], couleur);
+
+            if(texte == NULL){
+                SDL_DestroyRenderer(renderer);
+                SDL_DestroyWindow(window);
+                SDL_ExitWithError("Impossible to load the text");
+            }
+
+            texture = SDL_CreateTextureFromSurface(renderer, texte);
+            SDL_FreeSurface(texte);
+
+            if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
+                SDL_DestroyRenderer(renderer);
+                SDL_DestroyWindow(window);
+                SDL_ExitWithError("Impossible to load the texture");
+            }
+
+            rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
+            rectangle.y = 690;
+
+            if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
+                SDL_DestroyRenderer(renderer);
+                SDL_DestroyWindow(window);
+                SDL_ExitWithError("Impossible to display the texture");
+            }
+
+            SDL_RenderPresent(renderer);
+
+            texte = TTF_RenderText_Blended(police,  tab_music[i][3], couleur);
+
+            if(texte == NULL){
+                SDL_DestroyRenderer(renderer);
+                SDL_DestroyWindow(window);
+                SDL_ExitWithError("Impossible to load the text");
+            }
+
+            texture = SDL_CreateTextureFromSurface(renderer, texte);
+            SDL_FreeSurface(texte);
+
+            if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
+                SDL_DestroyRenderer(renderer);
+                SDL_DestroyWindow(window);
+                SDL_ExitWithError("Impossible to load the texture");
+            }
+
+            rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
+            rectangle.y = 730;
+
+            if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
+                SDL_DestroyRenderer(renderer);
+                SDL_DestroyWindow(window);
+                SDL_ExitWithError("Impossible to display the texture");
+            }
+
+            SDL_RenderPresent(renderer);
+
+            change_something = 0;
+
+            FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, musique, 0, &channel);
+
+            i++;
+
+        }
 
         while(SDL_PollEvent(&event)){ // The events that do not block the program
 
@@ -727,35 +777,6 @@ int main(int argc, char *argv[])
 
                         continue;
 
-                    case SDLK_l:
-
-                        if(volume > 0.1){
-                            
-                            volume = volume - 0.1;
-
-                            FMOD_Channel_SetVolume(channel, volume);
-
-                            printf("\n The volume is %.0lf", volume * 10);
-
-                        }             
-
-                        continue;
-
-                    case SDLK_q:
-
-                        if(volume < 1){
-                            
-                            volume = volume + 0.1;
-
-                            FMOD_Channel_SetVolume(channel, volume);
-
-                            printf("\n The volume is %.0lf", volume * 10);
-
-                        }
-
-                        continue;
-
-
                     case SDLK_o:
 
                         Add_Music();
@@ -774,7 +795,7 @@ int main(int argc, char *argv[])
 
                 case SDL_MOUSEBUTTONUP:
 
-                    if (event.button.button == SDL_BUTTON_LEFT){
+                    if (event.button.button == SDL_BUTTON_LEFT){    
                 
                         if(event.button.x >= 475 && event.button.x <= 525 && event.button.y <= 651 && event.button.y >= 601){
 
@@ -845,9 +866,38 @@ int main(int argc, char *argv[])
 
                     }
 
+                    if(event.button.y <= 651 && event.button.y >= 601 && event.button.x >= 100 && event.button.x <= 150){
+                    // Down the music
+                        Image_Down_Turn(rectangle, window, renderer, image, texture);
+
+                        if(volume > 0.1){
+                            
+                            volume = volume - 0.1;
+
+                            FMOD_Channel_SetVolume(channel, volume);
+
+                            printf("\n The volume is %.0lf", volume * 10);
+
+                        }
+                    }
+
+                    if(event.button.y <= 651 && event.button.y >= 601 && event.button.x >= 180 && event.button.x <= 230){
+                    // Up the music
+                        Image_Down_Turn(rectangle, window, renderer, image, texture);
+
+                        if(volume < 1){
+                            
+                            volume = volume + 0.1;
+
+                            FMOD_Channel_SetVolume(channel, volume);
+
+                            printf("\n The volume is %.0lf", volume * 10);
+
+                        }
+                    }
                 }
 
-                    continue;
+                continue;
                 
                 case SDL_QUIT: // If click on the button to close the window
 
