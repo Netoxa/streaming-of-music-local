@@ -1,4 +1,4 @@
-//Read the README.txt
+//Read the README.md
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -21,7 +21,7 @@ void Add_Image();
 void Add_Artist();
 void Add_Title();
 void Add_Genre();
-void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
+
 void Image_Next_Previous(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
 void Image_Mute_Demute(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, int volume_zero);
 void Image_Down_Turn(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
@@ -157,7 +157,7 @@ char ***Take_List_Music(int number_music, FILE *fic, char *music, char *images, 
 
 }
 
-/*void Add_Music(){
+void Add_Music(){
 
     FILE *fic = fopen("musics.txt", "a+");
 
@@ -335,23 +335,21 @@ void Add_Genre(){
 
     fprintf(fic, " %s", genre_add);
         
-}*/
+}
 
+void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int position){
 
-void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture){
+    image = IMG_Load(array);
 
-    char etat_musique[2][16] = {"images/paus.jpg","images/play.jpg"};
+        if(image == NULL){
+            SDL_DestroyRenderer(renderer);
+            SDL_DestroyWindow(window);
+            SDL_ExitWithError("Impossible to load the picture");
+        }        
 
-    image = IMG_Load(etat_musique[k]);
-
-    if(image == NULL){
-        SDL_DestroyRenderer(renderer);
-        SDL_DestroyWindow(window);
-        SDL_ExitWithError("Impossible to load the picture");
-    }        
-
-    texture = SDL_CreateTextureFromSurface(renderer, image);
-    SDL_FreeSurface(image);
+        texture = SDL_CreateTextureFromSurface(renderer, image);
+        
+        SDL_FreeSurface(image);
 
         if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
             SDL_DestroyRenderer(renderer);
@@ -359,8 +357,8 @@ void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Render
             SDL_ExitWithError("Impossible to load the texture");
         }
 
-    rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
-    rectangle.y = 600;
+        rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
+        rectangle.y = position;
 
         if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
             SDL_DestroyRenderer(renderer);
@@ -369,6 +367,15 @@ void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Render
         }
 
     SDL_RenderPresent(renderer);
+
+}
+
+
+void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture){
+
+    char etat_musique[2][16] = {"images/paus.jpg","images/play.jpg"};
+
+    Display_Images(rectangle, window, renderer, image, texture, etat_musique[k], 600);
 
 }
 
@@ -561,9 +568,6 @@ int main(int argc, char *argv[])
     printf("\n Pause / Replay : space ");
     printf("\n Replay the music a the begin : r");
     printf("\n Shuffle the music list : j");
-    printf("\n Lower the volume : l");
-    printf("\n Turn up the sound : q");
-    printf("\n Mute / demute the music : g");
     printf("\n Add a music : o");
     printf("\n");
     /*------------------------------------------------------------*/
@@ -779,41 +783,11 @@ int main(int argc, char *argv[])
 
                     case SDLK_o:
 
-                        /*Add_Music();
+                        Add_Music();
                         Add_Image();
                         Add_Artist();
                         Add_Title();
-                        Add_Genre();*/
-                         fic = fopen("musics.txt", "a+");
-
-                        int check = 0;
-                            char genre_add[255];
-
-    printf("\n Enter the name of the genre (Size between 1 and 50) : ");
-
-    while(check == 0){
-        
-        fgets(genre_add, 255, stdin);
-
-        if(genre_add[strlen(genre_add) - 1] == '\n')
-            genre_add[strlen(genre_add) - 1] = '\0';
-
-        if(strlen(genre_add) > 50 || strlen(genre_add) < 1){
-
-            printf("\n Wrong size\n");
-
-        }else{
-
-            check = 1;
-
-        }
-
-    }
-
-    fseek(fic, 0, SEEK_END); 
-
-    fprintf(fic, " %s", genre_add);
-    fclose(fic);
+                        Add_Genre();
 
                     continue;
 
