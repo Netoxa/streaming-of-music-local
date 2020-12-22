@@ -337,7 +337,7 @@ void Add_Genre(){
         
 }
 
-void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int position){
+void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int position_y, int position_x){
 
     image = IMG_Load(array);
 
@@ -357,8 +357,8 @@ void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *render
             SDL_ExitWithError("Impossible to load the texture");
         }
 
-        rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
-        rectangle.y = position;
+        rectangle.x = position_x;
+        rectangle.y = position_y;
 
         if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
             SDL_DestroyRenderer(renderer);
@@ -375,7 +375,7 @@ void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Render
 
     char etat_musique[2][16] = {"images/paus.jpg","images/play.jpg"};
 
-    Display_Images(rectangle, window, renderer, image, texture, etat_musique[k], 600);
+    Display_Images(rectangle, window, renderer, image, texture, etat_musique[k], 600, 475);
 
 }
 
@@ -426,33 +426,7 @@ void Image_Mute_Demute(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *ren
 
     char mute_demute[2][20] = {"images/mute.jpg","images/demute.jpg"};
 
-        image = IMG_Load(mute_demute[volume_zero]);
-
-        if(image == NULL){
-            SDL_DestroyRenderer(renderer);
-            SDL_DestroyWindow(window);
-            SDL_ExitWithError("Impossible to load the picture");
-        }        
-
-        texture = SDL_CreateTextureFromSurface(renderer, image);
-        SDL_FreeSurface(image);
-
-        if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
-            SDL_DestroyRenderer(renderer);
-            SDL_DestroyWindow(window);
-            SDL_ExitWithError("Impossible to load the texture");
-        }
-
-        rectangle.x = 560;
-        rectangle.y = 600;
-
-        if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
-            SDL_DestroyRenderer(renderer);
-            SDL_DestroyWindow(window);
-            SDL_ExitWithError("Impossible to display the texture");
-        }
-
-        SDL_RenderPresent(renderer);
+    Display_Images(rectangle, window, renderer, image, texture, mute_demute[volume_zero], 600, 560);
 
 }
 
@@ -508,9 +482,9 @@ int main(int argc, char *argv[])
     SDL_Window *window = NULL;
     SDL_Renderer *renderer = NULL;
     SDL_Surface *image = NULL;
-    SDL_Surface *texte = NULL;
     SDL_Texture *texture = NULL;
     SDL_Rect rectangle;
+    SDL_Surface *texte = NULL;
     SDL_Color couleur = {25, 31, 29};
     
     TTF_Font *police = NULL;
