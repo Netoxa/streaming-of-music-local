@@ -385,41 +385,13 @@ void Image_Next_Previous(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *r
     unsigned int i;
     unsigned int position = 280;
 
-
     for(i = 0; i < 2; i++){
 
-        image = IMG_Load(previous_next[i]);
-
-        if(image == NULL){
-            SDL_DestroyRenderer(renderer);
-            SDL_DestroyWindow(window);
-            SDL_ExitWithError("Impossible to load the picture");
-        }        
-
-        texture = SDL_CreateTextureFromSurface(renderer, image);
-        SDL_FreeSurface(image);
-
-        if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
-            SDL_DestroyRenderer(renderer);
-            SDL_DestroyWindow(window);
-            SDL_ExitWithError("Impossible to load the texture");
-        }
-
-        rectangle.x = position;
-        rectangle.y = 600;
-
-        if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
-            SDL_DestroyRenderer(renderer);
-            SDL_DestroyWindow(window);
-            SDL_ExitWithError("Impossible to display the texture");
-        }
-
-        SDL_RenderPresent(renderer);
+        Display_Images(rectangle, window, renderer, image, texture, previous_next[i], 600, position);
 
         position = 670;
 
     }
-
 }
 
 void Image_Mute_Demute(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, int volume_zero){
@@ -436,43 +408,13 @@ void Image_Down_Turn(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *rende
     unsigned int i;
     unsigned int position = 100;
 
-
     for(i = 0; i < 2; i++){
 
-        image = IMG_Load(previous_next[i]);
-
-        if(image == NULL){
-            SDL_DestroyRenderer(renderer);
-            SDL_DestroyWindow(window);
-            SDL_ExitWithError("Impossible to load the picture");
-        }        
-
-        texture = SDL_CreateTextureFromSurface(renderer, image);
-        SDL_FreeSurface(image);
-
-        if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
-            SDL_DestroyRenderer(renderer);
-            SDL_DestroyWindow(window);
-            SDL_ExitWithError("Impossible to load the texture");
-        }
-
-        rectangle.x = position;
-        rectangle.y = 600;
-
-        if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
-            SDL_DestroyRenderer(renderer);
-            SDL_DestroyWindow(window);
-            SDL_ExitWithError("Impossible to display the texture");
-        }
-
-        SDL_RenderPresent(renderer);
+        Display_Images(rectangle, window, renderer, image, texture, previous_next[i], 600, position);
 
         position = 180;
 
     }
-
-
-
 }
 
 int main(int argc, char *argv[])
