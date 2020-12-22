@@ -199,6 +199,8 @@ void Add_Music(){
 
     }
 
+    fclose(fic);
+
 }   
 
 void Add_Image(){
@@ -233,7 +235,7 @@ void Add_Image(){
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s%s", path, image_add);
-        
+         fclose(fic);
 }
 
 void Add_Artist(){
@@ -267,7 +269,7 @@ void Add_Artist(){
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s", artist_add);
-        
+         fclose(fic);
 }
 
 void Add_Title(){
@@ -301,7 +303,7 @@ void Add_Title(){
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s", title_add);
-
+ fclose(fic);
 }
 
 void Add_Genre(){
@@ -339,7 +341,7 @@ void Add_Genre(){
     //fclose(fic);
 
     printf("\n Music information has been recorded correctly");
-        
+         fclose(fic);
 }
 
 void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int po_y, int po_x){
@@ -676,18 +678,19 @@ int main(int argc, char *argv[])
                             continue;
 
                         case SDLK_o:
-
                             Add_Music();
                             Add_Image();
                             Add_Artist();
                             Add_Title();
                             Add_Genre();
-
+                                                  
                             FILE *fic = fopen("musics.txt", "r");
 
-    number_music = Take_Number_Music(music, fic);
+                            number_music = Take_Number_Music(music, fic);
     
-    tab_music = Take_List_Music(number_music, fic, music, images, artiste, titre, genre);
+                            tab_music = Take_List_Music(number_music, fic, music, images, artiste, titre, genre);
+                            
+                            fclose(fic);
 
                         continue;
 
