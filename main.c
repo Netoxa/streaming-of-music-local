@@ -157,7 +157,7 @@ char ***Take_List_Music(int number_music, FILE *fic, char *music, char *images, 
 
 }
 
-void Add_Music(){
+/*void Add_Music(){
 
     FILE *fic = fopen("musics.txt", "a+");
 
@@ -335,7 +335,7 @@ void Add_Genre(){
 
     fprintf(fic, " %s", genre_add);
         
-}
+}*/
 
 
 void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture){
@@ -779,11 +779,41 @@ int main(int argc, char *argv[])
 
                     case SDLK_o:
 
-                        Add_Music();
+                        /*Add_Music();
                         Add_Image();
                         Add_Artist();
                         Add_Title();
-                        Add_Genre();
+                        Add_Genre();*/
+                         fic = fopen("musics.txt", "a+");
+
+                        int check = 0;
+                            char genre_add[255];
+
+    printf("\n Enter the name of the genre (Size between 1 and 50) : ");
+
+    while(check == 0){
+        
+        fgets(genre_add, 255, stdin);
+
+        if(genre_add[strlen(genre_add) - 1] == '\n')
+            genre_add[strlen(genre_add) - 1] = '\0';
+
+        if(strlen(genre_add) > 50 || strlen(genre_add) < 1){
+
+            printf("\n Wrong size\n");
+
+        }else{
+
+            check = 1;
+
+        }
+
+    }
+
+    fseek(fic, 0, SEEK_END); 
+
+    fprintf(fic, " %s", genre_add);
+    fclose(fic);
 
                     continue;
 
