@@ -2,3 +2,4 @@ sons/katyPerry-DarkHorse.mp3 images/KatyPerry-PRISM.jpg KatyPerry DarkHorse pop
 sons/ArcticMonkeys-DoIWannaKnow.mp3 images/ArcticMonkeys-AM.jpg ArcticMonkeys DoIWannaKnow? rock
 sons/TwentyOnePilots-Chlorine.mp3 images/TwentyOnePilots-Trench.jpg TwentyOnePilots Chlorine hip-hop
 sons/GreenDay-Holiday.mp3 images/GreenDay-AmericanIdoit.jpg GreenDay Holiday rock
+sons/Paradise-Coldplay.mp3 images/Coldplay-MyloXyloto.jpg Coldplay Paradise rock
