@@ -21,7 +21,8 @@ void Add_Image();
 void Add_Artist();
 void Add_Title();
 void Add_Genre();
-
+void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int po_y, int po_x);
+void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
 void Image_Next_Previous(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
 void Image_Mute_Demute(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, int volume_zero);
 void Image_Down_Turn(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
@@ -337,7 +338,7 @@ void Add_Genre(){
         
 }
 
-void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int position_y, int position_x){
+void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int po_y, int po_x){
 
     image = IMG_Load(array);
 
@@ -357,8 +358,8 @@ void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *render
             SDL_ExitWithError("Impossible to load the texture");
         }
 
-        rectangle.x = position_x;
-        rectangle.y = position_y;
+        rectangle.x = po_x;
+        rectangle.y = po_y;
 
         if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
             SDL_DestroyRenderer(renderer);
@@ -511,35 +512,10 @@ int main(int argc, char *argv[])
 
             SDL_RenderClear(renderer);
 
-            image = IMG_Load(tab_music[i][1]);
-
-            if(image == NULL){
-                SDL_DestroyRenderer(renderer);
-                SDL_DestroyWindow(window);
-                SDL_ExitWithError("Impossible to load the picture");
-            }
-
-            texture = SDL_CreateTextureFromSurface(renderer, image);
-            SDL_FreeSurface(image);
-
-            if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
-                SDL_DestroyRenderer(renderer);
-                SDL_DestroyWindow(window);
-                SDL_ExitWithError("Impossible to load the texture");
-            }
-
-            rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
-            rectangle.y = 150;
-
-            if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
-                SDL_DestroyRenderer(renderer);
-                SDL_DestroyWindow(window);
-                SDL_ExitWithError("Impossible to display the texture");
-            }
-
-            SDL_RenderPresent(renderer);
+            Display_Images(rectangle, window, renderer, image, texture, tab_music[i][1], 150, 250);
 
             FMOD_System_GetMasterChannelGroup(system, &canal);
+            
             FMOD_ChannelGroup_GetPaused(canal, &etat);
 
             if (etat){
@@ -626,92 +602,90 @@ int main(int argc, char *argv[])
 
             switch(event.type){ // List of events
                 	
-                    case SDL_KEYUP:
+                case SDL_KEYUP:
                     
                     switch(event.key.keysym.sym){
 
-                    case SDLK_SPACE:
+                        case SDLK_SPACE:
 
-                        FMOD_System_GetMasterChannelGroup(system, &canal);
-                        FMOD_ChannelGroup_GetPaused(canal, &etat);
+                            FMOD_System_GetMasterChannelGroup(system, &canal);
+                            FMOD_ChannelGroup_GetPaused(canal, &etat);
 
-                        if (etat){
-                            // If the song is in pause
+                            if (etat){
+                                // If the song is in pause
 
-                            Image_Pause_Start(0, rectangle, window, renderer, image, texture);
+                                Image_Pause_Start(0, rectangle, window, renderer, image, texture);
                             
-                            FMOD_ChannelGroup_SetPaused(canal, 0); // We remove the pause
+                                FMOD_ChannelGroup_SetPaused(canal, 0); // We remove the pause
                             
-                        }else{
-                            // Otherwise, it is in play
+                            }else{
+                                // Otherwise, it is in play
 
-                            Image_Pause_Start(1, rectangle, window, renderer, image, texture);
+                                Image_Pause_Start(1, rectangle, window, renderer, image, texture);
                             
-                            FMOD_ChannelGroup_SetPaused(canal, 1); // We activate the pause
+                                FMOD_ChannelGroup_SetPaused(canal, 1); // We activate the pause
 
-                        }
+                            }
 
-                        continue;
+                            continue;
 
-                    case SDLK_p:
+                        case SDLK_p:
 
-                        if(i == number_music){
+                            if(i == number_music){
 
-                            printf("\n List of musics is finished");
+                                printf("\n List of musics is finished");
 
-                        }else{
+                            }else{
 
-                            lecture_check = 1;
+                                lecture_check = 1;
 
-                        }
+                            }
 
-                        continue;
+                            continue;
 
-                    case SDLK_r:
+                        case SDLK_r:
 
-                        if(i <= number_music){ // Music must be playing
+                            if(i <= number_music){ // Music must be playing
 
-                            FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, musique, 0, &channel);
+                                FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, musique, 0, &channel);
 
-                        }
+                            }
 
-                        continue;
+                            continue;
 
 
-                    case SDLK_m:
+                        case SDLK_m:
 
-                        i = 0; // Return the list to the beginning
-                        change_something = 1;
+                            i = 0; // Return the list to the beginning
+                            change_something = 1;
             
-                        continue;
+                            continue;
 
-                    
+                        case SDLK_j:
 
-                    case SDLK_j:
+                            tab_music = Shuffle_music_list(tab_music, number_music, 5);
 
-                        tab_music = Shuffle_music_list(tab_music, number_music, 5);
-
-                        i = 0;
+                            i = 0;
                         
-                        change_something = 1;
+                            change_something = 1;
+
+                            continue;
+
+                        case SDLK_o:
+
+                            Add_Music();
+                            Add_Image();
+                            Add_Artist();
+                            Add_Title();
+                            Add_Genre();
 
                         continue;
 
-                    case SDLK_o:
-
-                        Add_Music();
-                        Add_Image();
-                        Add_Artist();
-                        Add_Title();
-                        Add_Genre();
-
-                    continue;
-
-                    default:
+                        default:
                         
-                        continue;
+                            continue;
 
-                    }
+                        }
 
                 case SDL_MOUSEBUTTONUP:
 
