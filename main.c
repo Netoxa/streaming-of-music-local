@@ -301,7 +301,7 @@ void Add_Title(){
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s", title_add);
-        
+
 }
 
 void Add_Genre(){
@@ -335,6 +335,10 @@ void Add_Genre(){
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s", genre_add);
+
+    //fclose(fic);
+
+    printf("\n Music information has been recorded correctly");
         
 }
 
@@ -678,6 +682,12 @@ int main(int argc, char *argv[])
                             Add_Artist();
                             Add_Title();
                             Add_Genre();
+
+                            FILE *fic = fopen("musics.txt", "r");
+
+    number_music = Take_Number_Music(music, fic);
+    
+    tab_music = Take_List_Music(number_music, fic, music, images, artiste, titre, genre);
 
                         continue;
 
