@@ -512,7 +512,7 @@ int main(int argc, char *argv[])
 
             SDL_RenderClear(renderer);
 
-            Display_Images(rectangle, window, renderer, image, texture, tab_music[i][1], 150, 250);
+            Display_Images(rectangle, window, renderer, image, texture, tab_music[i][1], 150, 300);
 
             FMOD_System_GetMasterChannelGroup(system, &canal);
             
