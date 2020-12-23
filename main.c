@@ -16,11 +16,11 @@ void SDL_ExitWithError(const char *message);
 int Take_Number_Music(char *musics, FILE *fic);
 char ***Take_List_Music(int number_music, FILE *fic, char *music, char *images, char *titre, char *genre, char *artiste);
 char ***Shuffle_music_list(char ***tab_music, int number_music, int cols);
-void Add_Music();
-void Add_Image();
-void Add_Artist();
-void Add_Title();
-void Add_Genre();
+void Add_Music(FILE *fic);
+void Add_Image(FILE *fic);
+void Add_Artist(FILE *fic);
+void Add_Title(FILE *fic);
+void Add_Genre(FILE *fic);
 void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int po_y, int po_x);
 void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
 void Image_Next_Previous(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
@@ -328,7 +328,7 @@ void Add_Genre(FILE *fic){
     printf("\n Music information has been recorded correctly");
 
     fclose(fic);
-    
+
 }
 
 void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int po_y, int po_x){
