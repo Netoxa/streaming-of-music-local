@@ -158,9 +158,7 @@ char ***Take_List_Music(int number_music, FILE *fic, char *music, char *images, 
 
 }
 
-void Add_Music(){
-
-    FILE *fic = fopen("musics.txt", "a+");
+void Add_Music(FILE *fic){
 
     unsigned int check = 0;
     char music_add[255];
@@ -198,14 +196,9 @@ void Add_Music(){
         fprintf(fic, "\n%s%s", path, music_add);
 
     }
-
-    fclose(fic);
-
 }   
 
-void Add_Image(){
-
-    FILE *fic = fopen("musics.txt", "a+");
+void Add_Image(FILE *fic){
 
     unsigned int check = 0;
     char image_add[255];
@@ -235,12 +228,10 @@ void Add_Image(){
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s%s", path, image_add);
-         fclose(fic);
+
 }
 
-void Add_Artist(){
-
-    FILE *fic = fopen("musics.txt", "a+");
+void Add_Artist(FILE *fic){
 
     unsigned int check = 0;
     char artist_add[255];
@@ -269,12 +260,10 @@ void Add_Artist(){
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s", artist_add);
-         fclose(fic);
+
 }
 
-void Add_Title(){
-
-    FILE *fic = fopen("musics.txt", "a+");
+void Add_Title(FILE *fic){
 
     unsigned int check = 0;
     char title_add[255];
@@ -303,12 +292,10 @@ void Add_Title(){
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s", title_add);
- fclose(fic);
+
 }
 
-void Add_Genre(){
-
-    FILE *fic = fopen("musics.txt", "a+");
+void Add_Genre(FILE *fic){
 
     unsigned int check = 0;
     char genre_add[255];
@@ -338,10 +325,10 @@ void Add_Genre(){
 
     fprintf(fic, " %s", genre_add);
 
-    //fclose(fic);
-
     printf("\n Music information has been recorded correctly");
-         fclose(fic);
+
+    fclose(fic);
+    
 }
 
 void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int po_y, int po_x){
@@ -678,11 +665,14 @@ int main(int argc, char *argv[])
                             continue;
 
                         case SDLK_o:
-                            Add_Music();
-                            Add_Image();
-                            Add_Artist();
-                            Add_Title();
-                            Add_Genre();
+
+                            fic = fopen("musics.txt", "a+");
+                            
+                            Add_Music(fic);
+                            Add_Image(fic);
+                            Add_Artist(fic);
+                            Add_Title(fic);
+                            Add_Genre(fic);
                                                   
                             FILE *fic = fopen("musics.txt", "r");
 
