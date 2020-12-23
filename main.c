@@ -42,12 +42,20 @@ int Take_Number_Music(char *music, FILE *fic){
     int i = 0;
     
     while(fgets(music, 255, fic) != NULL){
+        
+        
+        if( music[strlen(music) - 2] == '1')
 
-        i++;
+            i++;
 
     }
 
+    if( music[strlen(music) - 1] == '1')
+    
+        i++;
+
     return i;
+
 }
 
 char ***Take_List_Music(int number_music, FILE *fic, char *music, char *images, char *titre, char *genre, char *artiste){
@@ -77,23 +85,33 @@ char ***Take_List_Music(int number_music, FILE *fic, char *music, char *images, 
     }
 
     for(i = 0; i < number_music; i++){
+     
+        fscanf(fic, "%s %s %s %s %s", music, images, artiste, titre, genre);
         
+        if(genre[strlen(genre) - 1] == '1'){
+
         j = 0;
         
-        fscanf(fic, "%s %s %s %s %s", music, images, artiste, titre, genre);
-
         strcpy(tab[i][j], music);
+
         j++;
         strcpy(tab[i][j], images);
+    
         j++;
         strcpy(tab[i][j], artiste);
+  
         j++;
         strcpy(tab[i][j], titre);
+ 
         j++;
         strcpy(tab[i][j], genre);
+    
+        }else{
 
+            i--;
+
+        }     
     }
-
 
     return tab;
 
