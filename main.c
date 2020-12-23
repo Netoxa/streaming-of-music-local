@@ -104,6 +104,8 @@ char ***Take_List_Music(int number_music, FILE *fic, char *music, char *images, 
         strcpy(tab[i][j], titre);
  
         j++;
+        genre[strlen(genre) - 1] = '\0';
+
         strcpy(tab[i][j], genre);
     
         }else{
@@ -117,7 +119,7 @@ char ***Take_List_Music(int number_music, FILE *fic, char *music, char *images, 
 
 }
 
- char ***Shuffle_music_list(char ***tab_music, int number_music, int cols){
+char ***Shuffle_music_list(char ***tab_music, int number_music, int cols){
 
     unsigned int i;
     unsigned int j;
@@ -343,6 +345,8 @@ void Add_Genre(FILE *fic){
 
     fprintf(fic, " %s", genre_add);
 
+    fputc('1', fic);
+
     printf("\n Music information has been recorded correctly");
 
     fclose(fic);
@@ -429,6 +433,38 @@ void Image_Down_Turn(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *rende
     }
 }
 
+char *Delete_music(){
+
+    unsigned int check = 0;
+    char *musique_delete = malloc(sizeof(char) * 255);
+
+    printf("\n Enter the name of the music (Size between 1 and 50) : ");
+
+    while(check == 0){
+        
+        fgets(musique_delete, 255, stdin);
+
+        if(musique_delete[strlen(musique_delete) - 1] == '\n')
+            musique_delete[strlen(musique_delete) - 1] = '\0';
+
+        if(strlen(musique_delete) > 50 || strlen(musique_delete) < 1){
+
+            printf("\n Wrong size\n");
+
+        }else{
+
+            check = 1;
+
+        }
+
+    }
+
+    return musique_delete;
+
+}
+
+
+
 int main(int argc, char *argv[])
 {
     SDL_bool program_launched = SDL_TRUE;
@@ -464,6 +500,7 @@ int main(int argc, char *argv[])
     char titre[255];
     char genre[255];
     char ***tab_music;
+    char *delete_music;
 
     /* Launch SDL */
     if(SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -497,6 +534,7 @@ int main(int argc, char *argv[])
     printf("\n Replay the music a the begin : r");
     printf("\n Shuffle the music list : j");
     printf("\n Add a music : o");
+    printf("\n Remove music : x");
     printf("\n");
     /*------------------------------------------------------------*/
 
@@ -702,6 +740,10 @@ int main(int argc, char *argv[])
 
                         continue;
 
+                        case SDLK_x:
+
+                            delete_music = Delete_music();
+                            printf("\n %s", delete_music);
                         default:
                         
                             continue;
