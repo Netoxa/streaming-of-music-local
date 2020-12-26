@@ -16,11 +16,11 @@ void SDL_ExitWithError(const char *message);
 int Take_Number_Music(char *musics, FILE *fic);
 char ***Take_List_Music(int number_music, FILE *fic, char *music, char *images, char *titre, char *genre, char *artiste);
 char ***Shuffle_music_list(char ***tab_music, int number_music, int cols);
-void Add_Music(FILE *fic);
-void Add_Image(FILE *fic);
-void Add_Artist(FILE *fic);
-void Add_Title(FILE *fic);
-void Add_Genre(FILE *fic);
+void Add_Music();
+void Add_Image();
+void Add_Artist();
+void Add_Title();
+void Add_Genre();
 void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int po_y, int po_x);
 void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
 void Image_Next_Previous(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
@@ -42,20 +42,12 @@ int Take_Number_Music(char *music, FILE *fic){
     int i = 0;
     
     while(fgets(music, 255, fic) != NULL){
-        
-        
-        if( music[strlen(music) - 2] == '1')
 
-            i++;
+        i++;
 
     }
 
-    if( music[strlen(music) - 1] == '1')
-    
-        i++;
-
     return i;
-
 }
 
 char ***Take_List_Music(int number_music, FILE *fic, char *music, char *images, char *titre, char *genre, char *artiste){
@@ -85,41 +77,29 @@ char ***Take_List_Music(int number_music, FILE *fic, char *music, char *images, 
     }
 
     for(i = 0; i < number_music; i++){
-     
-        fscanf(fic, "%s %s %s %s %s", music, images, artiste, titre, genre);
         
-        if(genre[strlen(genre) - 1] == '1'){
-
         j = 0;
         
-        strcpy(tab[i][j], music);
+        fscanf(fic, "%s %s %s %s %s", music, images, artiste, titre, genre);
 
+        strcpy(tab[i][j], music);
         j++;
         strcpy(tab[i][j], images);
-    
         j++;
         strcpy(tab[i][j], artiste);
-  
         j++;
         strcpy(tab[i][j], titre);
- 
         j++;
-        genre[strlen(genre) - 1] = '\0';
-
         strcpy(tab[i][j], genre);
-    
-        }else{
 
-            i--;
-
-        }     
     }
+
 
     return tab;
 
 }
 
-char ***Shuffle_music_list(char ***tab_music, int number_music, int cols){
+ char ***Shuffle_music_list(char ***tab_music, int number_music, int cols){
 
     unsigned int i;
     unsigned int j;
@@ -178,7 +158,9 @@ char ***Shuffle_music_list(char ***tab_music, int number_music, int cols){
 
 }
 
-void Add_Music(FILE *fic){
+void Add_Music(){
+
+    FILE *fic = fopen("musics.txt", "a+");
 
     unsigned int check = 0;
     char music_add[255];
@@ -216,9 +198,14 @@ void Add_Music(FILE *fic){
         fprintf(fic, "\n%s%s", path, music_add);
 
     }
+
+    fclose(fic);
+
 }   
 
-void Add_Image(FILE *fic){
+void Add_Image(){
+
+    FILE *fic = fopen("musics.txt", "a+");
 
     unsigned int check = 0;
     char image_add[255];
@@ -248,10 +235,12 @@ void Add_Image(FILE *fic){
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s%s", path, image_add);
-
+         fclose(fic);
 }
 
-void Add_Artist(FILE *fic){
+void Add_Artist(){
+
+    FILE *fic = fopen("musics.txt", "a+");
 
     unsigned int check = 0;
     char artist_add[255];
@@ -280,10 +269,12 @@ void Add_Artist(FILE *fic){
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s", artist_add);
-
+         fclose(fic);
 }
 
-void Add_Title(FILE *fic){
+void Add_Title(){
+
+    FILE *fic = fopen("musics.txt", "a+");
 
     unsigned int check = 0;
     char title_add[255];
@@ -312,10 +303,12 @@ void Add_Title(FILE *fic){
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s", title_add);
-
+ fclose(fic);
 }
 
-void Add_Genre(FILE *fic){
+void Add_Genre(){
+
+    FILE *fic = fopen("musics.txt", "a+");
 
     unsigned int check = 0;
     char genre_add[255];
@@ -345,12 +338,10 @@ void Add_Genre(FILE *fic){
 
     fprintf(fic, " %s", genre_add);
 
-    fputc('1', fic);
+    //fclose(fic);
 
     printf("\n Music information has been recorded correctly");
-
-    fclose(fic);
-
+         fclose(fic);
 }
 
 void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int po_y, int po_x){
@@ -385,7 +376,6 @@ void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *render
     SDL_RenderPresent(renderer);
 
 }
-
 
 void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture){
 
@@ -433,21 +423,21 @@ void Image_Down_Turn(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *rende
     }
 }
 
-char *Delete_music(){
+char *Choice_Music(){
 
     unsigned int check = 0;
-    char *musique_delete = malloc(sizeof(char) * 255);
+    char *music_delete = malloc(sizeof(char) * 255);
 
     printf("\n Enter the name of the music (Size between 1 and 50) : ");
 
     while(check == 0){
         
-        fgets(musique_delete, 255, stdin);
+        fgets(music_delete, 255, stdin);
 
-        if(musique_delete[strlen(musique_delete) - 1] == '\n')
-            musique_delete[strlen(musique_delete) - 1] = '\0';
+        if(music_delete[strlen(music_delete) - 1] == '\n')
+            music_delete[strlen(music_delete) - 1] = '\0';
 
-        if(strlen(musique_delete) > 50 || strlen(musique_delete) < 1){
+        if(strlen(music_delete) > 50 || strlen(music_delete) < 1){
 
             printf("\n Wrong size\n");
 
@@ -458,11 +448,154 @@ char *Delete_music(){
         }
 
     }
+    return music_delete;
 
-    return musique_delete;
 
 }
 
+int Verify_music(char ***tab_music, char *choice_delete_music, int number_music){
+
+    unsigned int i;
+    char music[255];
+
+    for(i = 0; i < number_music; i++){
+
+        strncpy(music, tab_music[i][0] + 5, 255);
+
+        if(strcmp(music, choice_delete_music) == 0){
+
+            return 1;
+   
+
+        }
+    }
+
+    return 0;
+
+}
+
+void Delete_music(char *choice_playlist, char *choice_delete_music, FILE *fic, int number_music, char *music, char *images, char *artiste, char *titre, char *genre){
+
+    unsigned int i;
+    unsigned int j;
+    char music_[255];
+
+    rewind(fic);
+
+    number_music--;
+
+    char ***tab = malloc(sizeof(char**) * number_music);
+
+
+    for(i = 0; i < number_music; i++){
+
+        tab[i] = malloc(sizeof(char*) * 5);
+
+    }
+
+
+    for(i = 0; i < number_music; i++){
+        
+        for(j = 0; j < 5; j++){
+
+            tab[i][j] = malloc(sizeof(char) * 255);
+
+        }
+    }
+
+
+
+    for(i = 0; i < number_music; i++){
+        
+        j = 0;
+        
+        fscanf(fic, "%s %s %s %s %s", music, images, artiste, titre, genre);
+
+        strncpy(music_, music + 5, 255);
+
+        if(strcmp(music_, choice_delete_music) != 0){
+
+            strcpy(tab[i][j], music);
+            j++;
+            strcpy(tab[i][j], images);
+            j++;
+            strcpy(tab[i][j], artiste);
+            j++;
+            strcpy(tab[i][j], titre);
+            j++;
+            strcpy(tab[i][j], genre);
+
+        }else{
+
+            i--;
+
+        }
+    }
+
+    fclose(fic);
+
+    fic = fopen(choice_playlist, "w+");
+
+    for(i = 0; i < number_music; i++){
+
+        fprintf(fic, "%s %s %s %s %s", tab[i][0], tab[i][1], tab[i][2], tab[i][3], tab[i][4]);
+
+        fputc('\n', fic);
+
+    }
+
+    printf("\n The deletion of a music has been made");
+
+    fclose(fic);
+
+}
+
+
+char *List_playlist(FILE *fic){
+
+    char playlist[255];
+    int i = 0;
+    char *choice_playlist = malloc(sizeof(char) * 255);
+
+    printf("\n List of playlist : ");
+    
+    while(fgets(playlist, 255, fic) != NULL){
+
+        printf("\n %s", playlist);
+
+    }
+    rewind(fic);
+    
+    while(fgets(playlist, 255, fic) != NULL){
+    while(i == 0){
+
+        printf("\n Enter the name of the playlist : ");
+        
+        fgets(choice_playlist, 255, stdin);
+
+        if(choice_playlist[strlen(choice_playlist) - 1] == '\n')
+            choice_playlist[strlen(choice_playlist) - 1] = '\0';
+
+            
+
+        if(strcmp(playlist, choice_playlist) == 0){
+            i = 1;
+ 
+
+        }
+           
+            
+    }
+
+        
+
+    }
+
+    fclose(fic);
+    return choice_playlist;
+
+
+}
 
 
 int main(int argc, char *argv[])
@@ -489,9 +622,11 @@ int main(int argc, char *argv[])
 
     unsigned int lecture_check;
     unsigned int change_something;
-    unsigned int number_music;
+    unsigned int number_music = 0;
+    unsigned int number_playlist = 0;
     unsigned int i = 0;
     unsigned int j = 0;
+    unsigned int check;
     unsigned int volume_zero = 1;
     float volume = 0.5; 
     char music[255];
@@ -500,7 +635,9 @@ int main(int argc, char *argv[])
     char titre[255];
     char genre[255];
     char ***tab_music;
-    char *delete_music;
+    char *choice_delete_music;
+    char *choice_playlist;
+    FILE *fic;
 
     /* Launch SDL */
     if(SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -520,13 +657,7 @@ int main(int argc, char *argv[])
 
     police = TTF_OpenFont("polices/ArialNova-Light.ttf", 30);
 
-    FILE *fic = fopen("musics.txt", "r");
-
-    number_music = Take_Number_Music(music, fic);
     
-    tab_music = Take_List_Music(number_music, fic, music, images, artiste, titre, genre);
-
-    fclose(fic);
 
     printf("\n\n Play the music list : p");
     printf("\n Restart the music list : m");
@@ -534,7 +665,8 @@ int main(int argc, char *argv[])
     printf("\n Replay the music a the begin : r");
     printf("\n Shuffle the music list : j");
     printf("\n Add a music : o");
-    printf("\n Remove music : x");
+    printf("\n Delete a music : x");
+    printf("\n Choice a playlist : c");
     printf("\n");
     /*------------------------------------------------------------*/
 
@@ -680,15 +812,18 @@ int main(int argc, char *argv[])
 
                         case SDLK_p:
 
-                            if(i == number_music){
+
+                            if(number_music == 0)
+
+                                printf("\n No playlist selection");
+
+                            if(i == number_music && number_music > 1)
 
                                 printf("\n List of musics is finished");
 
-                            }else{
+                            else
 
                                 lecture_check = 1;
-
-                            }
 
                             continue;
 
@@ -722,15 +857,19 @@ int main(int argc, char *argv[])
 
                         case SDLK_o:
 
-                            fic = fopen("musics.txt", "a+");
-                            
-                            Add_Music(fic);
-                            Add_Image(fic);
-                            Add_Artist(fic);
-                            Add_Title(fic);
-                            Add_Genre(fic);
+                        fic = fopen("playlists.txt", "r");
+
+                        choice_playlist =  List_playlist(fic);
+                        
+                         fic = fopen(choice_playlist, "r");
+
+                            Add_Music();
+                            Add_Image();
+                            Add_Artist();
+                            Add_Title();
+                            Add_Genre();
                                                   
-                            FILE *fic = fopen("musics.txt", "r");
+                            fic = fopen(choice_playlist, "r");
 
                             number_music = Take_Number_Music(music, fic);
     
@@ -738,12 +877,60 @@ int main(int argc, char *argv[])
                             
                             fclose(fic);
 
-                        continue;
+                            continue;
 
                         case SDLK_x:
 
-                            delete_music = Delete_music();
-                            printf("\n %s", delete_music);
+                            fic = fopen("playlists.txt", "r");
+
+                        choice_playlist =  List_playlist(fic);
+                        
+                    fic = fopen(choice_playlist, "r");
+                      
+                    number_music = Take_Number_Music(music, fic);
+            
+     
+                            tab_music = Take_List_Music(number_music, fic, music, images, artiste, titre, genre);
+                           
+                            choice_delete_music = Choice_Music();
+
+                            check = Verify_music(tab_music, choice_delete_music, number_music);
+
+                            if(check == 1)
+                            
+ 
+                                Delete_music(choice_playlist, choice_delete_music, fic, number_music, music, images, artiste, titre, genre);
+                            
+                            /*else
+                            
+                                printf("\n Music does not exist");*/
+                            
+                           
+                            fic = fopen("musics.txt", "r");
+
+                            number_music = Take_Number_Music(music, fic);
+    
+                            tab_music = Take_List_Music(number_music, fic, music, images, artiste, titre, genre);
+
+                   
+
+                            continue;
+
+                        case SDLK_c:
+
+                        fic = fopen("playlists.txt", "r");
+
+                        choice_playlist =  List_playlist(fic);
+                        
+                    fic = fopen(choice_playlist, "r");
+                    number_music = Take_Number_Music(music, fic);
+    
+                        tab_music = Take_List_Music(number_music, fic, music, images, artiste, titre, genre);
+
+                        fclose(fic);
+
+                        continue;
+
                         default:
                         
                             continue;
