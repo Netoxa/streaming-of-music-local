@@ -622,7 +622,7 @@ int main(int argc, char *argv[])
 
     unsigned int lecture_check;
     unsigned int change_something;
-    unsigned int number_music = 0;
+    int number_music = 0;
     unsigned int number_playlist = 0;
     unsigned int i = 0;
     unsigned int j = 0;
@@ -635,8 +635,8 @@ int main(int argc, char *argv[])
     char titre[255];
     char genre[255];
     char ***tab_music;
-    char *choice_delete_music;
-    char *choice_playlist;
+    char *choice_delete_music = NULL;
+    char *choice_playlist = NULL;
     FILE *fic;
 
     /* Launch SDL */
@@ -857,9 +857,10 @@ int main(int argc, char *argv[])
 
                         case SDLK_o:
 
-                        fic = fopen("playlists.txt", "r");
+                        if(choice_playlist == NULL){
+                            printf("\n No playlist selection");
 
-                        choice_playlist =  List_playlist(fic);
+                        }else{
                         
                          fic = fopen(choice_playlist, "r");
 
@@ -876,14 +877,15 @@ int main(int argc, char *argv[])
                             tab_music = Take_List_Music(number_music, fic, music, images, artiste, titre, genre);
                             
                             fclose(fic);
-
+                        }
                             continue;
 
                         case SDLK_x:
 
-                            fic = fopen("playlists.txt", "r");
+                            if(choice_playlist == NULL){
+                            printf("\n No playlist selection");
 
-                        choice_playlist =  List_playlist(fic);
+                        }else{
                         
                     fic = fopen(choice_playlist, "r");
                       
@@ -901,17 +903,17 @@ int main(int argc, char *argv[])
  
                                 Delete_music(choice_playlist, choice_delete_music, fic, number_music, music, images, artiste, titre, genre);
                             
-                            /*else
+                            else
                             
-                                printf("\n Music does not exist");*/
+                                printf("\n Music does not exist");
                             
                            
-                            fic = fopen("musics.txt", "r");
+                            fic = fopen(choice_playlist, "r");
 
                             number_music = Take_Number_Music(music, fic);
     
                             tab_music = Take_List_Music(number_music, fic, music, images, artiste, titre, genre);
-
+                        }
                    
 
                             continue;
