@@ -812,12 +812,15 @@ int main(int argc, char *argv[])
 
                         case SDLK_p:
 
-
-                            if(number_music == 0)
+                            if(choice_playlist == NULL)
 
                                 printf("\n No playlist selection");
 
-                            if(i == number_music && number_music > 1)
+                            if(number_music == 0 && choice_playlist != NULL)
+
+                                printf("\n The playlist is empty");
+
+                            if(i == number_music && number_music > 1 && choice_playlist != NULL)
 
                                 printf("\n List of musics is finished");
 
@@ -857,10 +860,10 @@ int main(int argc, char *argv[])
 
                         case SDLK_o:
 
-                        if(choice_playlist == NULL){
+                        if(choice_playlist == NULL)
                             printf("\n No playlist selection");
 
-                        }else{
+                            else{
                         
                          fic = fopen(choice_playlist, "r");
 
@@ -930,6 +933,8 @@ int main(int argc, char *argv[])
                         tab_music = Take_List_Music(number_music, fic, music, images, artiste, titre, genre);
 
                         fclose(fic);
+
+                        lecture_check = 0;
 
                         continue;
 
