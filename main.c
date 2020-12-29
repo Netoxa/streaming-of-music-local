@@ -353,42 +353,62 @@ void Add_playlist(){
     char *playlist_add = malloc(sizeof(char) * 255);
     char playlist_list[255];
 
-    printf("\n Enter the name of the new playlist (Size between 1 and 50) : ");
+    
+
+    printf("\n List of playlist : ");
+    
+    while(fgets(playlist_list, 255, fic) != NULL){
+
+        printf("\n %s", playlist_list);
+
+    }
 
     while(check == 0){
+
+        printf("\n Enter the name of the new playlist (Size between 1 and 50) : ");
+        
+        rewind(fic);
         
         fgets(playlist_add, 255, stdin);
 
         if(playlist_add[strlen(playlist_add) - 1] == '\n')
+
             playlist_add[strlen(playlist_add) - 1] = '\0';
 
             
 
-        if(strlen(playlist_add) > 50){
+        if(strlen(playlist_add) > 50 && strlen(playlist_add) < 1){
 
             printf("\n Wrong size\n");
+
         }
 
         
         while(fgets(playlist_list, 255, fic) != NULL){
 
+            if(playlist_list[strlen(playlist_list) - 1] == '\n')
+                
+                playlist_list[strlen(playlist_list) - 1] = '\0';
+
              if(strcmp(playlist_add, playlist_list) == 0){
+                 
                  printf("\n The playlist already exists\n");
 
+                break;
+
              }else{
+
                  check = 1;
-             }
+
+            }
         }
-    
     }
 
-        playlist_add = strcat(playlist_add, ".txt");
+    fseek(fic, 0, SEEK_END);
 
-        fseek(fic, 0, SEEK_END);
+    if(ftell(fic) == 0){
 
-        if(ftell(fic) == 0){
-
-        fprintf(fic, "%s", playlist_add);
+    fprintf(fic, "%s", playlist_add);
         
     }else{
 
@@ -397,7 +417,9 @@ void Add_playlist(){
     }
 
     fclose(fic);
+
     fic = fopen(playlist_add, "w+");
+
     fclose(fic);
 
 }
