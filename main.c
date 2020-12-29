@@ -158,9 +158,8 @@ char ***Take_List_Music(int number_music, FILE *fic, char *music, char *images, 
 
 }
 
-void Add_Music(){
+void Add_Music(FILE *fic){
 
-    FILE *fic = fopen("musics.txt", "a+");
 
     unsigned int check = 0;
     char music_add[255];
@@ -198,14 +197,10 @@ void Add_Music(){
         fprintf(fic, "\n%s%s", path, music_add);
 
     }
-
-    fclose(fic);
-
 }   
 
-void Add_Image(){
+void Add_Image(FILE *fic){
 
-    FILE *fic = fopen("musics.txt", "a+");
 
     unsigned int check = 0;
     char image_add[255];
@@ -235,12 +230,11 @@ void Add_Image(){
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s%s", path, image_add);
-         fclose(fic);
+       //  fclose(fic);
 }
 
-void Add_Artist(){
+void Add_Artist(FILE *fic){
 
-    FILE *fic = fopen("musics.txt", "a+");
 
     unsigned int check = 0;
     char artist_add[255];
@@ -269,12 +263,11 @@ void Add_Artist(){
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s", artist_add);
-         fclose(fic);
+        // fclose(fic);
 }
 
-void Add_Title(){
+void Add_Title(FILE *fic){
 
-    FILE *fic = fopen("musics.txt", "a+");
 
     unsigned int check = 0;
     char title_add[255];
@@ -303,12 +296,11 @@ void Add_Title(){
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s", title_add);
- fclose(fic);
+ //fclose(fic);
 }
 
-void Add_Genre(){
+void Add_Genre(FILE *fic){
 
-    FILE *fic = fopen("musics.txt", "a+");
 
     unsigned int check = 0;
     char genre_add[255];
@@ -341,19 +333,16 @@ void Add_Genre(){
     //fclose(fic);
 
     printf("\n Music information has been recorded correctly");
-         fclose(fic);
 }
 
 void Add_playlist(){
  
 
-    FILE *fic = fopen("playlists.txt", "a+");
-
     unsigned int check = 0;
     char *playlist_add = malloc(sizeof(char) * 255);
     char playlist_list[255];
 
-    
+    FILE *fic = fopen("playlists.txt", "a+");
 
     printf("\n List of playlist : ");
     
@@ -947,13 +936,15 @@ int main(int argc, char *argv[])
 
                             else{
                         
-                         fic = fopen(choice_playlist, "r");
+                         fic = fopen(choice_playlist, "a+");
 
-                            Add_Music();
-                            Add_Image();
-                            Add_Artist();
-                            Add_Title();
-                            Add_Genre();
+                            Add_Music(fic);
+                            Add_Image(fic);
+                            Add_Artist(fic);
+                            Add_Title(fic);
+                            Add_Genre(fic);
+
+                            fclose(fic);
                                                   
                             fic = fopen(choice_playlist, "r");
 
