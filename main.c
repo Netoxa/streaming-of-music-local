@@ -344,6 +344,65 @@ void Add_Genre(){
          fclose(fic);
 }
 
+void Add_playlist(){
+ 
+
+    FILE *fic = fopen("playlists.txt", "a+");
+
+    unsigned int check = 0;
+    char *playlist_add = malloc(sizeof(char) * 255);
+    char playlist_list[255];
+
+    printf("\n Enter the name of the new playlist (Size between 1 and 50) : ");
+
+    while(check == 0){
+        
+        fgets(playlist_add, 255, stdin);
+
+        if(playlist_add[strlen(playlist_add) - 1] == '\n')
+            playlist_add[strlen(playlist_add) - 1] = '\0';
+
+            
+
+        if(strlen(playlist_add) > 50){
+
+            printf("\n Wrong size\n");
+        }
+
+        
+        while(fgets(playlist_list, 255, fic) != NULL){
+
+             if(strcmp(playlist_add, playlist_list) == 0){
+                 printf("\n The playlist already exists\n");
+
+             }else{
+                 check = 1;
+             }
+        }
+    
+}
+
+        playlist_add = strcat(playlist_add, ".txt");
+
+        fseek(fic, 0, SEEK_END);
+
+        if(ftell(fic) == 0){
+
+        fprintf(fic, "%s", playlist_add);
+        
+    }else{
+
+        fprintf(fic, "\n%s", playlist_add);
+
+    }
+
+    fclose(fic);
+    fic = fopen(playlist_add, "w+");
+    fclose(fic);
+
+    }
+
+
 void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int po_y, int po_x){
 
     image = IMG_Load(array);
@@ -564,32 +623,35 @@ char *List_playlist(FILE *fic){
         printf("\n %s", playlist);
 
     }
-    rewind(fic);
-    
-    while(fgets(playlist, 255, fic) != NULL){
-    while(i == 0){
 
-        printf("\n Enter the name of the playlist : ");
+    while(i == 0){
+    rewind(fic);
+    printf("\n Enter the name of the playlist : ");
         
         fgets(choice_playlist, 255, stdin);
 
         if(choice_playlist[strlen(choice_playlist) - 1] == '\n')
             choice_playlist[strlen(choice_playlist) - 1] = '\0';
-
-            
-
-        if(strcmp(playlist, choice_playlist) == 0){
-            i = 1;
- 
-
-        }
-           
-            
-    }
+    while(fgets(playlist, 255, fic) != NULL){
+    
 
         
 
+
+   printf("\n %s", playlist);
+
+        if(strcmp(playlist, choice_playlist) == 0 && i == 0){
+         
+            i = 1;
+break;
+        }
+    
+            
     }
+    }
+        
+
+    
 
     fclose(fic);
     return choice_playlist;
@@ -923,7 +985,7 @@ int main(int argc, char *argv[])
 
                         case SDLK_c:
 
-                        fic = fopen("playlists.txt", "r");
+                        fic = fopen("playlists.txt", "rb");
 
                         choice_playlist =  List_playlist(fic);
                         
@@ -942,7 +1004,17 @@ int main(int argc, char *argv[])
                         
                             continue;
 
+                            case SDLK_w:
+
+                        Add_playlist();
+
+                        continue;
+
+
                         }
+                    
+                        
+
 
                 case SDL_MOUSEBUTTONUP:
 
