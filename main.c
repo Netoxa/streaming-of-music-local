@@ -725,6 +725,8 @@ int main(int argc, char *argv[])
     printf("\n Add a music : o");
     printf("\n Delete a music : x");
     printf("\n Choice a playlist : c");
+    printf("\n Create a playlist : w");
+    printf("\n Delete a playlist : z");
     printf("\n");
     /*------------------------------------------------------------*/
 
