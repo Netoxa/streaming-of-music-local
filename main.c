@@ -380,7 +380,7 @@ void Add_playlist(){
              }
         }
     
-}
+    }
 
         playlist_add = strcat(playlist_add, ".txt");
 
@@ -400,7 +400,7 @@ void Add_playlist(){
     fic = fopen(playlist_add, "w+");
     fclose(fic);
 
-    }
+}
 
 
 void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int po_y, int po_x){
@@ -562,8 +562,6 @@ void Delete_music(char *choice_playlist, char *choice_delete_music, FILE *fic, i
         }
     }
 
-
-
     for(i = 0; i < number_music; i++){
         
         j = 0;
@@ -612,10 +610,10 @@ void Delete_music(char *choice_playlist, char *choice_delete_music, FILE *fic, i
 
 char *List_playlist(FILE *fic){
 
-    char playlist[255];
-    int i = 0;
+    char *playlist = malloc(sizeof(char) * 255);
     char *choice_playlist = malloc(sizeof(char) * 255);
-
+    int i = 0;
+    
     printf("\n List of playlist : ");
     
     while(fgets(playlist, 255, fic) != NULL){
@@ -625,37 +623,35 @@ char *List_playlist(FILE *fic){
     }
 
     while(i == 0){
-    rewind(fic);
-    printf("\n Enter the name of the playlist : ");
+
+        rewind(fic);
+
+        printf("\n Enter the name of the playlist : ");
         
         fgets(choice_playlist, 255, stdin);
 
         if(choice_playlist[strlen(choice_playlist) - 1] == '\n')
+
             choice_playlist[strlen(choice_playlist) - 1] = '\0';
-    while(fgets(playlist, 255, fic) != NULL){
-    
 
-        
-
-
-   printf("\n %s", playlist);
-
-        if(strcmp(playlist, choice_playlist) == 0 && i == 0){
-         
-            i = 1;
-break;
-        }
-    
+        while(fgets(playlist, 255, fic) != NULL){
             
-    }
-    }
-        
+            if(playlist[strlen(playlist) - 1] == '\n')
+                
+                playlist[strlen(playlist) - 1] = '\0';
 
+            if(strcmp(playlist, choice_playlist) == 0)
+            
+                i = 1;
     
+        }
+    }
 
     fclose(fic);
-    return choice_playlist;
 
+    printf("\n The selection of the playlist has been made");
+
+    return choice_playlist;
 
 }
 
@@ -985,7 +981,7 @@ int main(int argc, char *argv[])
 
                         case SDLK_c:
 
-                        fic = fopen("playlists.txt", "rb");
+                        fic = fopen("playlists.txt", "r");
 
                         choice_playlist =  List_playlist(fic);
                         
