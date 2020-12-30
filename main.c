@@ -666,6 +666,66 @@ char *List_playlist(FILE *fic){
 
 }
 
+void Delete_playlist(char *choice_playlist, FILE *fic, int number_playlist){
+
+    number_playlist--;
+
+    unsigned int i;
+    char playlist_list[255];
+
+    char **tab = malloc(sizeof(char*) * number_playlist);
+
+    for(i = 0; i < number_playlist; i++){
+
+        tab[i] = malloc(sizeof(char) * 255);
+
+    }
+
+
+for(i = 0; i < number_playlist; i++){
+    while(fgets(playlist_list, 255, fic) != NULL){
+
+        if(playlist_list[strlen(playlist_list) - 1] == '\n')
+                
+                playlist_list[strlen(playlist_list) - 1] = '\0';
+
+        if(strcmp(playlist_list, choice_playlist) != 0){
+ strcpy(tab[i], playlist_list);
+
+
+        }
+
+       
+    }
+    }
+     fclose(fic);
+
+     remove(choice_playlist);
+
+     fic = fopen(choice_playlist, "r");
+
+     if(fic == NULL){
+         
+         fclose(fic);
+
+
+fic = fopen("playlists.txt", "w+");
+
+     for(i = 0; i < number_playlist; i++){
+         fputs(tab[i], fic);
+     }
+    printf("\n The file %s has been deleted", choice_playlist);
+    fclose(fic);
+
+     }else{
+
+         printf("\n Impossible to delete de file");
+     }
+
+    
+
+}
+
 
 int main(int argc, char *argv[])
 {
@@ -738,6 +798,7 @@ int main(int argc, char *argv[])
     printf("\n Choice a playlist : c");
     printf("\n Create a playlist : w");
     printf("\n Delete a playlist : z");
+    printf("\n Rename a playlist : h");
     printf("\n");
     /*------------------------------------------------------------*/
 
@@ -1002,7 +1063,7 @@ int main(int argc, char *argv[])
                         
                     fic = fopen(choice_playlist, "r");
                     number_music = Take_Number_Music(music, fic);
-    
+
                         tab_music = Take_List_Music(number_music, fic, music, images, artiste, titre, genre);
 
                         fclose(fic);
@@ -1011,15 +1072,37 @@ int main(int argc, char *argv[])
 
                         continue;
 
-                        default:
                         
-                            continue;
 
                             case SDLK_w:
 
                         Add_playlist();
 
                         continue;
+
+                        case SDLK_z:
+
+                        if(choice_playlist == NULL){
+
+                             printf("\n No playlist selection");
+                        }else{
+
+
+                        
+
+                        fic = fopen("playlists.txt", "r");
+                        number_music = Take_Number_Music(music, fic);
+                           
+                        rewind(fic);
+
+                            Delete_playlist(choice_playlist, fic, number_music);
+
+                        }
+                        continue;
+
+                        default:
+                        
+                            continue;
 
 
                         }
