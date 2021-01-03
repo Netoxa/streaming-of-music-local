@@ -682,7 +682,7 @@ void Delete_playlist(char *choice_playlist, FILE *fic, int number_playlist){
     }
 
 
-for(i = 0; i < number_playlist; i++){
+    for(i = 0; i < number_playlist; i++){
     while(fgets(playlist_list, 255, fic) != NULL){
 
         if(playlist_list[strlen(playlist_list) - 1] == '\n')
@@ -690,7 +690,7 @@ for(i = 0; i < number_playlist; i++){
                 playlist_list[strlen(playlist_list) - 1] = '\0';
 
         if(strcmp(playlist_list, choice_playlist) != 0){
- strcpy(tab[i], playlist_list);
+    strcpy(tab[i], playlist_list);
 
 
         }
@@ -709,7 +709,7 @@ for(i = 0; i < number_playlist; i++){
          fclose(fic);
 
 
-fic = fopen("playlists.txt", "w+");
+    fic = fopen("playlists.txt", "w+");
 
      for(i = 0; i < number_playlist; i++){
          fputs(tab[i], fic);
@@ -723,6 +723,110 @@ fic = fopen("playlists.txt", "w+");
      }
 
     
+
+}
+
+void Change_name(char *choice_playlist, char *rename_playlist, FILE *fic, int number_playlist){
+
+
+
+
+    unsigned int i;
+    char playlist_list[255];
+    
+    char **tab = malloc(sizeof(char*) * number_playlist);
+    rename(choice_playlist, rename_playlist);
+    for(i = 0; i < number_playlist; i++){
+
+        tab[i] = malloc(sizeof(char) * 255);
+
+    }
+    i = 0;
+    fic = fopen("playlists.txt", "r");
+
+     while(fgets(playlist_list, 255, fic) != NULL){
+
+        if(playlist_list[strlen(playlist_list) - 1] == '\n')
+                
+                playlist_list[strlen(playlist_list) - 1] = '\0';
+            
+        if(strcmp(playlist_list, choice_playlist) == 0){
+            
+             strcpy(tab[i], rename_playlist);
+                    
+        }else{
+            strcpy(tab[i], playlist_list);
+        }
+   
+    
+
+    
+
+    i++;
+
+    }
+  
+         fclose(fic);
+
+    fic = fopen("playlists.txt", "w+");
+
+     for(i = 0; i < number_playlist; i++){
+
+         fputs(tab[i], fic);
+      if(i < number_playlist - 1)
+      fputc('\n', fic);
+     }
+     fclose(fic);
+
+
+
+
+
+}
+
+
+char *List_playlist_(FILE *fic){
+
+    char *playlist = malloc(sizeof(char) * 255);
+    char *rename_playlist = malloc(sizeof(char) * 255);
+    int i = 0;
+    
+
+
+    while(i == 0){
+    rewind(fic);
+        printf("\n Enter the new name of the playlist (each playlist must have a different name) : ");
+        
+        fgets(rename_playlist, 255, stdin);
+
+        if(rename_playlist[strlen(rename_playlist) - 1] == '\n')
+
+            rename_playlist[strlen(rename_playlist) - 1] = '\0';
+
+        while(fgets(playlist, 255, fic) != NULL){
+            
+            if(playlist[strlen(playlist) - 1] == '\n')
+                
+                playlist[strlen(playlist) - 1] = '\0';
+
+            if(strcmp(playlist, rename_playlist) == 0){
+               i = 2;
+                break;
+            }       
+    
+        }
+
+        if(i != 2)
+            i = 1;
+        else
+            i = 0;
+
+       
+    }
+
+    fclose(fic);
+
+    return rename_playlist;
 
 }
 
@@ -766,6 +870,7 @@ int main(int argc, char *argv[])
     char ***tab_music;
     char *choice_delete_music = NULL;
     char *choice_playlist = NULL;
+    char *rename_playlist = NULL;
     FILE *fic;
 
     /* Launch SDL */
@@ -1098,6 +1203,27 @@ int main(int argc, char *argv[])
                             Delete_playlist(choice_playlist, fic, number_music);
 
                         }
+                        continue;
+
+                        
+
+                        case SDLK_h:
+
+
+                        if(choice_playlist == NULL){
+
+                             printf("\n No playlist selection");
+                        }else{
+
+                         fic = fopen("playlists.txt", "r");
+                             number_music = Take_Number_Music(music, fic);
+                         rename_playlist =  List_playlist_(fic);
+                         Change_name(choice_playlist, rename_playlist, fic, number_music);
+
+
+
+                        }
+
                         continue;
 
                         default:
