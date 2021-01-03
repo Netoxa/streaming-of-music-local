@@ -81,6 +81,8 @@ char ***Take_List_Music(int number_music, FILE *fic, char *music, char *images, 
 
     }
 
+    fclose(fic);
+
 
     return tab;
 
@@ -1036,6 +1038,13 @@ int main(int argc, char *argv[])
 
                         case SDLK_p:
 
+                          fic = fopen(choice_playlist, "r");
+                    number_element = Take_Number_Music(music, fic);
+
+                        tab_music = Take_List_Music(number_element, fic, music, images, artiste, titre, genre);
+
+            
+
                             if(choice_playlist == NULL)
 
                                 printf("\n No playlist selection");
@@ -1152,15 +1161,7 @@ int main(int argc, char *argv[])
                         fic = fopen("playlists.txt", "r");
 
                         choice_playlist =  List_playlist(fic);
-                        
-                    fic = fopen(choice_playlist, "r");
-                    number_element = Take_Number_Music(music, fic);
-
-                        tab_music = Take_List_Music(number_element, fic, music, images, artiste, titre, genre);
-
-                        fclose(fic);
-
-                        lecture_check = 0;
+                
 
                         continue;
 
