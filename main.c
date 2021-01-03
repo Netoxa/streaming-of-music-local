@@ -12,20 +12,7 @@
 #define WINDOW_HEIGHT 800
 
 
-void SDL_ExitWithError(const char *message);
-int Take_Number_Music(char *musics, FILE *fic);
-char ***Take_List_Music(int number_music, FILE *fic, char *music, char *images, char *titre, char *genre, char *artiste);
-char ***Shuffle_music_list(char ***tab_music, int number_music, int cols);
-void Add_Music();
-void Add_Image();
-void Add_Artist();
-void Add_Title();
-void Add_Genre();
-void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int po_y, int po_x);
-void Image_Pause_Start(int k, SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
-void Image_Next_Previous(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
-void Image_Mute_Demute(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, int volume_zero);
-void Image_Down_Turn(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture);
+
 
 void SDL_ExitWithError(const char *message){
     
@@ -855,7 +842,7 @@ int main(int argc, char *argv[])
 
     unsigned int lecture_check;
     unsigned int change_something;
-    int number_music = 0;
+    int number_element = 0;
     unsigned int number_playlist = 0;
     unsigned int i = 0;
     unsigned int j = 0;
@@ -917,7 +904,7 @@ int main(int argc, char *argv[])
 
         FMOD_Channel_IsPlaying(channel, &etat_musique); // Check if a music is playing
 
-        if((lecture_check == 1 && !etat_musique && i < number_music) || change_something == 1 && lecture_check == 1){
+        if((lecture_check == 1 && !etat_musique && i < number_element) || change_something == 1 && lecture_check == 1){
 
             resultat = FMOD_System_CreateSound(system, tab_music[i][0] , FMOD_SOFTWARE | FMOD_2D | FMOD_CREATESTREAM, 0, &musique);
 
@@ -1053,11 +1040,11 @@ int main(int argc, char *argv[])
 
                                 printf("\n No playlist selection");
 
-                            if(number_music == 0 && choice_playlist != NULL)
+                            if(number_element == 0 && choice_playlist != NULL)
 
                                 printf("\n The playlist is empty");
 
-                            if(i == number_music && number_music > 1 && choice_playlist != NULL)
+                            if(i == number_element && number_element > 1 && choice_playlist != NULL)
 
                                 printf("\n List of musics is finished");
 
@@ -1069,7 +1056,7 @@ int main(int argc, char *argv[])
 
                         case SDLK_r:
 
-                            if(i <= number_music){ // Music must be playing
+                            if(i <= number_element){ // Music must be playing
 
                                 FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, musique, 0, &channel);
 
@@ -1087,7 +1074,7 @@ int main(int argc, char *argv[])
 
                         case SDLK_j:
 
-                            tab_music = Shuffle_music_list(tab_music, number_music, 5);
+                            tab_music = Shuffle_music_list(tab_music, number_element, 5);
 
                             i = 0;
                         
@@ -1114,9 +1101,9 @@ int main(int argc, char *argv[])
                                                   
                             fic = fopen(choice_playlist, "r");
 
-                            number_music = Take_Number_Music(music, fic);
+                            number_element = Take_Number_Music(music, fic);
     
-                            tab_music = Take_List_Music(number_music, fic, music, images, artiste, titre, genre);
+                            tab_music = Take_List_Music(number_element, fic, music, images, artiste, titre, genre);
                             
                             fclose(fic);
                         }
@@ -1131,19 +1118,19 @@ int main(int argc, char *argv[])
                         
                     fic = fopen(choice_playlist, "r");
                       
-                    number_music = Take_Number_Music(music, fic);
+                    number_element = Take_Number_Music(music, fic);
             
      
-                            tab_music = Take_List_Music(number_music, fic, music, images, artiste, titre, genre);
+                            tab_music = Take_List_Music(number_element, fic, music, images, artiste, titre, genre);
                            
                             choice_delete_music = Choice_Music();
 
-                            check = Verify_music(tab_music, choice_delete_music, number_music);
+                            check = Verify_music(tab_music, choice_delete_music, number_element);
 
                             if(check == 1)
                             
  
-                                Delete_music(choice_playlist, choice_delete_music, fic, number_music, music, images, artiste, titre, genre);
+                                Delete_music(choice_playlist, choice_delete_music, fic, number_element, music, images, artiste, titre, genre);
                             
                             else
                             
@@ -1152,9 +1139,9 @@ int main(int argc, char *argv[])
                            
                             fic = fopen(choice_playlist, "r");
 
-                            number_music = Take_Number_Music(music, fic);
+                            number_element = Take_Number_Music(music, fic);
     
-                            tab_music = Take_List_Music(number_music, fic, music, images, artiste, titre, genre);
+                            tab_music = Take_List_Music(number_element, fic, music, images, artiste, titre, genre);
                         }
                    
 
@@ -1167,9 +1154,9 @@ int main(int argc, char *argv[])
                         choice_playlist =  List_playlist(fic);
                         
                     fic = fopen(choice_playlist, "r");
-                    number_music = Take_Number_Music(music, fic);
+                    number_element = Take_Number_Music(music, fic);
 
-                        tab_music = Take_List_Music(number_music, fic, music, images, artiste, titre, genre);
+                        tab_music = Take_List_Music(number_element, fic, music, images, artiste, titre, genre);
 
                         fclose(fic);
 
@@ -1196,11 +1183,11 @@ int main(int argc, char *argv[])
                         
 
                         fic = fopen("playlists.txt", "r");
-                        number_music = Take_Number_Music(music, fic);
+                        number_element = Take_Number_Music(music, fic);
                            
                         rewind(fic);
 
-                            Delete_playlist(choice_playlist, fic, number_music);
+                            Delete_playlist(choice_playlist, fic, number_element);
 
                         }
                         continue;
@@ -1216,9 +1203,9 @@ int main(int argc, char *argv[])
                         }else{
 
                          fic = fopen("playlists.txt", "r");
-                             number_music = Take_Number_Music(music, fic);
+                             number_element = Take_Number_Music(music, fic);
                          rename_playlist =  List_playlist_(fic);
-                         Change_name(choice_playlist, rename_playlist, fic, number_music);
+                         Change_name(choice_playlist, rename_playlist, fic, number_element);
 
 
 
@@ -1263,7 +1250,7 @@ int main(int argc, char *argv[])
 
                     }
 
-                    if(event.button.x >= 280 && event.button.x <= 330 && event.button.y <= 651 && event.button.y >= 601 && number_music != 0){ 
+                    if(event.button.x >= 280 && event.button.x <= 330 && event.button.y <= 651 && event.button.y >= 601 && number_element != 0){ 
                     // previous music
                         if(i == 1){
 
@@ -1281,7 +1268,7 @@ int main(int argc, char *argv[])
 
                     }
 
-                    if(event.button.x >= 670 && event.button.x <= 720 && event.button.y <= 651 && event.button.y >= 601 && i < number_music){ 
+                    if(event.button.x >= 670 && event.button.x <= 720 && event.button.y <= 651 && event.button.y >= 601 && i < number_element){ 
                     //next music
                         change_something = 1;
 
@@ -1356,7 +1343,7 @@ int main(int argc, char *argv[])
 
     /*------------------------------------------------------------*/
 
-    for (i = 0; i < number_music; i++) {
+    for (i = 0; i < number_element; i++) {
         
         for (j = 0; j < 5; j++) {
         
