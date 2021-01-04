@@ -620,38 +620,54 @@ char *List_playlist(FILE *fic){
 
         printf("\n %s", playlist);
 
+        i++;
+
     }
 
-    while(i == 0){
+    if(i == 0){
 
-        rewind(fic);
+        printf("\n There is not playlist");
 
-        printf("\n Enter the name of the playlist : ");
+        fclose(fic);
+
+        i = 1;
+
+    }else{
+
+        i = 0;
+
+        while(i == 0){
+
+            rewind(fic);
+
+            printf("\n Enter the name of the playlist : ");
         
-        fgets(choice_playlist, 255, stdin);
+            fgets(choice_playlist, 255, stdin);
 
-        if(choice_playlist[strlen(choice_playlist) - 1] == '\n')
+            if(choice_playlist[strlen(choice_playlist) - 1] == '\n')
 
-            choice_playlist[strlen(choice_playlist) - 1] = '\0';
+                choice_playlist[strlen(choice_playlist) - 1] = '\0';
 
-        while(fgets(playlist, 255, fic) != NULL){
+            while(fgets(playlist, 255, fic) != NULL){
             
-            if(playlist[strlen(playlist) - 1] == '\n')
+                if(playlist[strlen(playlist) - 1] == '\n')
                 
-                playlist[strlen(playlist) - 1] = '\0';
+                    playlist[strlen(playlist) - 1] = '\0';
 
-            if(strcmp(playlist, choice_playlist) == 0)
+                if(strcmp(playlist, choice_playlist) == 0)
             
-                i = 1;
+                    i = 1;
     
+            }
         }
+
+        fclose(fic);
+
+        printf("\n The selection of the playlist has been made");
+
+        return choice_playlist;
+        
     }
-
-    fclose(fic);
-
-    printf("\n The selection of the playlist has been made");
-
-    return choice_playlist;
 
 }
 
