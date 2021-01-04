@@ -290,7 +290,6 @@ void Add_Title(FILE *fic){
 
 void Add_Genre(FILE *fic){
 
-
     unsigned int check = 0;
     char genre_add[255];
 
@@ -301,25 +300,22 @@ void Add_Genre(FILE *fic){
         fgets(genre_add, 255, stdin);
 
         if(genre_add[strlen(genre_add) - 1] == '\n')
+
             genre_add[strlen(genre_add) - 1] = '\0';
 
-        if(strlen(genre_add) > 50 || strlen(genre_add) < 1){
+        if(strlen(genre_add) > 50 || strlen(genre_add) < 1)
 
             printf("\n Wrong size");
 
-        }else{
+        else
 
             check = 1;
-
-        }
 
     }
 
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s", genre_add);
-
-    //fclose(fic);
 
     printf("\n Music information has been recorded correctly");
 }
@@ -411,8 +407,6 @@ void Add_playlist(){
 
     }
 }
-
-
 
 void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int po_y, int po_x){
 
@@ -617,7 +611,6 @@ void Delete_music(char *choice_playlist, char *choice_delete_music, FILE *fic, i
     fclose(fic);
 
 }
-
 
 char *List_playlist(FILE *fic){
 
@@ -843,6 +836,7 @@ char *List_playlist_(FILE *fic){
 
 int main(int argc, char *argv[])
 {
+
     SDL_bool program_launched = SDL_TRUE;
     SDL_Event event;
     SDL_Window *window = NULL;
@@ -865,7 +859,7 @@ int main(int argc, char *argv[])
 
     unsigned int lecture_check;
     unsigned int change_something;
-    int number_element = 0;
+    unsigned int number_element = 0;
     unsigned int number_playlist = 0;
     unsigned int i = 0;
     unsigned int j = 0;
@@ -900,8 +894,6 @@ int main(int argc, char *argv[])
         SDL_ExitWithError("Impossible to create ttf");
 
     police = TTF_OpenFont("polices/ArialNova-Light.ttf", 30);
-
-    
 
     printf("\n\n Play the music list : p");
     printf("\n Restart the music list : m");
