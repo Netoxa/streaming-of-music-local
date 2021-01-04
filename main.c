@@ -327,7 +327,7 @@ void Add_Genre(FILE *fic){
 void Add_playlist(){
  
 
-    unsigned int check = 0;
+    unsigned int i = 0;
     char *playlist_add = malloc(sizeof(char) * 255);
     char playlist_list[255];
 
@@ -339,68 +339,79 @@ void Add_playlist(){
 
         printf("\n %s", playlist_list);
 
+        i++;
+
     }
 
-    while(check == 0){
+    if(i >= 10){
 
-        printf("\n Enter the name of the new playlist (Size between 1 and 50) : ");
+        printf("\n Maximum playlist reached");
+
+        fclose(fic);
+
+    }else{
+
+        while(i == 0){
+
+            printf("\n Enter the name of the new playlist (Size between 1 and 50) : ");
         
-        rewind(fic);
+            rewind(fic);
         
-        fgets(playlist_add, 255, stdin);
+            fgets(playlist_add, 255, stdin);
 
-        if(playlist_add[strlen(playlist_add) - 1] == '\n')
+            if(playlist_add[strlen(playlist_add) - 1] == '\n')
 
-            playlist_add[strlen(playlist_add) - 1] = '\0';
+                playlist_add[strlen(playlist_add) - 1] = '\0';
 
             
 
-        if(strlen(playlist_add) > 50 && strlen(playlist_add) < 1){
+            if(strlen(playlist_add) > 50 && strlen(playlist_add) < 1){
 
-            printf("\n Wrong size");
-
-        }
-
-        
-        while(fgets(playlist_list, 255, fic) != NULL){
-
-            if(playlist_list[strlen(playlist_list) - 1] == '\n')
-                
-                playlist_list[strlen(playlist_list) - 1] = '\0';
-
-             if(strcmp(playlist_add, playlist_list) == 0){
-                 
-                 printf("\n The playlist already exists");
-
-                break;
-
-             }else{
-
-                 check = 1;
+                printf("\n Wrong size");
 
             }
+
+            while(fgets(playlist_list, 255, fic) != NULL){
+
+                if(playlist_list[strlen(playlist_list) - 1] == '\n')
+                
+                    playlist_list[strlen(playlist_list) - 1] = '\0';
+
+                if(strcmp(playlist_add, playlist_list) == 0){
+                 
+                    printf("\n The playlist already exists");
+
+                    break;
+
+                }else{
+
+                    i = 1;
+
+                }
+            }
         }
-    }
 
-    fseek(fic, 0, SEEK_END);
+        fseek(fic, 0, SEEK_END);
 
-    if(ftell(fic) == 0){
+        if(ftell(fic) == 0){
 
-    fprintf(fic, "%s", playlist_add);
+        fprintf(fic, "%s", playlist_add);
         
-    }else{
+        }else{
 
-        fprintf(fic, "\n%s", playlist_add);
+            fprintf(fic, "\n%s", playlist_add);
+
+        }
+
+        fclose(fic);
+
+        fic = fopen(playlist_add, "w+");
+
+        fclose(fic);
 
     }
-
-    fclose(fic);
-
-    fic = fopen(playlist_add, "w+");
-
-    fclose(fic);
-
 }
+
 
 
 void Display_Images(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, char *array, int po_y, int po_x){
@@ -666,7 +677,7 @@ char *List_playlist(FILE *fic){
         printf("\n The selection of the playlist has been made");
 
         return choice_playlist;
-        
+
     }
 
 }
