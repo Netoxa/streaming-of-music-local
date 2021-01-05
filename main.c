@@ -11,9 +11,6 @@
 #define WINDOW_WIDTH 1000
 #define WINDOW_HEIGHT 800
 
-
-
-
 void SDL_ExitWithError(const char *message){
     
     SDL_Log("ERREUR : %s\n", message);
@@ -464,6 +461,21 @@ void Image_Next_Previous(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *r
     }
 }
 
+void Image_Playlist(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture){
+
+    char playlist_choice[4][30] = {"images/choice_playlist.jpg","images/play_playlist.jpg"};
+    unsigned int i;
+    unsigned int position = 75;
+
+    for(i = 0; i < 2; i++){
+
+        Display_Images(rectangle, window, renderer, image, texture, playlist_choice[i], position, 50);
+
+        position += 85;
+
+    }
+}
+
 void Image_Mute_Demute(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture, int volume_zero){
 
     char mute_demute[2][20] = {"images/mute.jpg","images/demute.jpg"};
@@ -910,8 +922,10 @@ int main(int argc, char *argv[])
     /*------------------------------------------------------------*/
 
     SDL_SetRenderDrawColor(renderer, 85, 158, 142, 255);
-    SDL_RenderClear(renderer);
     SDL_RenderPresent(renderer);
+    SDL_RenderClear(renderer);
+
+    Image_Playlist(rectangle, window, renderer, image, texture);
 
     while(program_launched){ // As long as the window is displayed
 
@@ -922,11 +936,9 @@ int main(int argc, char *argv[])
             resultat = FMOD_System_CreateSound(system, tab_music[i][0] , FMOD_SOFTWARE | FMOD_2D | FMOD_CREATESTREAM, 0, &musique);
 
             // Check if it has been opened and it's not the last music
-            if (resultat != FMOD_OK){
+            if (resultat != FMOD_OK)
 
                 SDL_ExitWithError("Impossible to read the music");
-
-            }
 
             SDL_RenderClear(renderer);
 
@@ -949,6 +961,8 @@ int main(int argc, char *argv[])
             Image_Mute_Demute(rectangle, window, renderer, image, texture, volume_zero);
 
             Image_Down_Turn(rectangle, window, renderer, image, texture);
+
+            Image_Playlist(rectangle, window, renderer, image, texture);
                 
             texte = TTF_RenderText_Blended(police, tab_music[i][2], couleur);
 
@@ -1099,31 +1113,31 @@ int main(int argc, char *argv[])
 
                         case SDLK_o:
 
-                        if(choice_playlist == NULL)
+                            if(choice_playlist == NULL)
 
-                            printf("\n No playlist selection");
+                                printf("\n No playlist selection");
 
-                        else{
+                            else{
                         
-                         fic = fopen(choice_playlist, "a+");
+                                fic = fopen(choice_playlist, "a+");
 
-                            Add_Music(fic);
-                            Add_Image(fic);
-                            Add_Artist(fic);
-                            Add_Title(fic);
-                            Add_Genre(fic);
+                                Add_Music(fic);
+                                Add_Image(fic);
+                                Add_Artist(fic);
+                                Add_Title(fic);
+                                Add_Genre(fic);
 
-                            fclose(fic);
+                                fclose(fic);
                                                   
-                            fic = fopen(choice_playlist, "r");
+                                fic = fopen(choice_playlist, "r");
 
-                            number_element = Take_Number_Music(music, fic);
+                                number_element = Take_Number_Music(music, fic);
     
-                            tab_music = Take_List_Music(number_element, fic, music, images, artiste, titre, genre);
+                                tab_music = Take_List_Music(number_element, fic, music, images, artiste, titre, genre);
                             
-                            fclose(fic);
+                                fclose(fic);
 
-                        }
+                            }
 
                         continue;
 
@@ -1245,86 +1259,119 @@ int main(int argc, char *argv[])
                         
                                 FMOD_ChannelGroup_SetPaused(canal, 1); // We activate the pause
 
+                            }
                         }
 
-                    }
+                        if(event.button.x >= 280 && event.button.x <= 330 && event.button.y <= 651 && event.button.y >= 601 && number_element != 0){ 
+                        
+                            if(i == 1){ // previous music
 
-                    if(event.button.x >= 280 && event.button.x <= 330 && event.button.y <= 651 && event.button.y >= 601 && number_element != 0){ 
-                    // previous music
-                        if(i == 1){
+                                i--; // If it's the first music that plays
 
-                            i--; // If it's the first music that plays
+                                change_something = 1;
 
-                            change_something = 1;
+                            }
 
-                        }
+                            if(i > 1){
 
-                        if(i > 1){
+                                i = i - 2; // If it's another music that plays
 
-                            i = i - 2; // If it's another music that plays
+                                change_something = 1;
 
-                            change_something = 1;
-
-                        }
-
-                    }
-
-                    if(event.button.x >= 670 && event.button.x <= 720 && event.button.y <= 651 && event.button.y >= 601 && i < number_element)
-                    //next music
-                        change_something = 1;
-
-                    if(event.button.x >= 560 && event.button.x <= 610 && event.button.y <= 651 && event.button.y >= 601){ 
-                    //mute / demute music
-                        if(volume_zero == 1){
-
-                             FMOD_Channel_SetVolume(channel, 0);
-
-                             volume_zero = 0;
-
-                        }else{
-
-                             FMOD_Channel_SetVolume(channel, volume);
-
-                             printf("\n The volume is %.0lf", volume * 10);
-
-                             volume_zero = 1;
+                            }
 
                         }
 
-                        Image_Mute_Demute(rectangle, window, renderer, image, texture, volume_zero);
+                        if(event.button.x >= 670 && event.button.x <= 720 && event.button.y <= 651 && event.button.y >= 601 && i < number_element)
+                    
+                            change_something = 1; // next music
 
-                    }
+                        if(event.button.x >= 560 && event.button.x <= 610 && event.button.y <= 651 && event.button.y >= 601){ 
+     
+                            if(volume_zero == 1){ // mute music
 
-                    if(event.button.y <= 651 && event.button.y >= 601 && event.button.x >= 100 && event.button.x <= 150){
-                    // Down the music
-                        Image_Down_Turn(rectangle, window, renderer, image, texture);
+                                FMOD_Channel_SetVolume(channel, 0);
 
-                        if(volume > 0.1){
+                                volume_zero = 0;
+
+                            }else{ // demute music
+
+                                FMOD_Channel_SetVolume(channel, volume);
+
+                                printf("\n The volume is %.0lf", volume * 10);
+
+                                volume_zero = 1;
+
+                            }
+
+                            Image_Mute_Demute(rectangle, window, renderer, image, texture, volume_zero);
+
+                        }
+
+                        if(event.button.y <= 651 && event.button.y >= 601 && event.button.x >= 100 && event.button.x <= 150){
+                    
+                            Image_Down_Turn(rectangle, window, renderer, image, texture);
+
+                            if(volume > 0.1){ // Down the music
                             
-                            volume = volume - 0.1;
+                                volume = volume - 0.1;
 
-                            FMOD_Channel_SetVolume(channel, volume);
+                                FMOD_Channel_SetVolume(channel, volume);
 
-                            printf("\n The volume is %.0lf", volume * 10);
+                                printf("\n The volume is %.0lf", volume * 10);
 
+                            }
                         }
-                    }
 
-                    if(event.button.y <= 651 && event.button.y >= 601 && event.button.x >= 180 && event.button.x <= 230){
-                    // Up the music
-                        Image_Down_Turn(rectangle, window, renderer, image, texture);
+                        if(event.button.y <= 651 && event.button.y >= 601 && event.button.x >= 180 && event.button.x <= 230){
+                    
+                            Image_Down_Turn(rectangle, window, renderer, image, texture); // Up the music
 
-                        if(volume < 1){
+                            if(volume < 1){
                             
-                            volume = volume + 0.1;
+                                volume = volume + 0.1;
 
-                            FMOD_Channel_SetVolume(channel, volume);
+                                FMOD_Channel_SetVolume(channel, volume);
 
-                            printf("\n The volume is %.0lf", volume * 10);
+                                printf("\n The volume is %.0lf", volume * 10);
+
+                            }
+                        }
+                
+                        if(event.button.y <= 147 && event.button.y >= 75 && event.button.x >= 50 && event.button.x <= 200){   
+
+                            fic = fopen("playlists.txt", "r");
+
+                            choice_playlist =  List_playlist(fic);
+
+                        }
+
+                        if(event.button.y <= 232 && event.button.y >= 160 && event.button.x >= 50 && event.button.x <= 200){   
+
+                            fic = fopen(choice_playlist, "r");
+                            
+                            number_element = Take_Number_Music(music, fic);
+
+                            tab_music = Take_List_Music(number_element, fic, music, images, artiste, titre, genre);
+
+                            if(choice_playlist == NULL)
+
+                                printf("\n No playlist selection");
+
+                            if(number_element == 0 && choice_playlist != NULL)
+
+                                printf("\n The playlist is empty");
+
+                            if(i == number_element && number_element > 1 && choice_playlist != NULL)
+
+                                printf("\n List of musics is finished");
+
+                            else
+
+                                lecture_check = 1;
 
                         }
                     }
-                }
 
                 continue;
                 
