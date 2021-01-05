@@ -466,11 +466,12 @@ void Image_Next_Previous(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *r
 
 void Image_Playlist(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture){
 
-    char playlist_choice[3][30] = {"images/choice_playlist.jpg","images/play_playlist.jpg","images/create_playlist.jpg"};
+    char playlist_choice[5][30] = {"images/choice_playlist.jpg","images/play_playlist.jpg","images/create_playlist.jpg","images/rename_playlist.jpg"
+    ,"images/delete_playlist.jpg"};
     unsigned int i;
     unsigned int position = 75;
 
-    for(i = 0; i < 3; i++){
+    for(i = 0; i < 5; i++){
 
         Display_Images(rectangle, window, renderer, image, texture, playlist_choice[i], position, 50);
 
@@ -706,6 +707,8 @@ void Delete_playlist(char *choice_playlist, FILE *fic, int number_playlist){
         tab[i] = malloc(sizeof(char) * 255);
 
     }
+
+    i = 0;
     
     while(fgets(playlist_list, 255, fic) != NULL){
 
@@ -721,12 +724,12 @@ void Delete_playlist(char *choice_playlist, FILE *fic, int number_playlist){
 
         } 
     }
-    
-     fclose(fic);
 
-     remove(choice_playlist);
+    fclose(fic);
 
-     fic = fopen(choice_playlist, "r");
+    remove(choice_playlist);
+
+    fic = fopen(choice_playlist, "r");
 
      if(fic == NULL){
          
@@ -734,17 +737,23 @@ void Delete_playlist(char *choice_playlist, FILE *fic, int number_playlist){
 
         fic = fopen("playlists.txt", "w+");
 
-        for(i = 0; i < number_playlist; i++){}
+        for(i = 0; i < number_playlist; i++){
 
             fputs(tab[i], fic);
-     
+
+            if(i < number_playlist - 1)
+
+                fputc('\n', fic);
+
+        }
+
         printf("\n The file %s has been deleted", choice_playlist);
 
         fclose(fic);
 
-     }else
+    }else
 
-         printf("\n Impossible to delete de file");
+        printf("\n Impossible to delete de file");
 
 }
 
@@ -797,6 +806,8 @@ void Change_name(char *choice_playlist, char *rename_playlist, FILE *fic, int nu
     }
 
     fclose(fic);
+
+    printf("\n The playlist %s was been rename in %s", choice_playlist, rename_playlist);
 
 }
 
@@ -916,8 +927,6 @@ int main(int argc, char *argv[])
     printf("\n Shuffle the music list : j");
     printf("\n Add a music : o");
     printf("\n Delete a music : x");
-    printf("\n Delete a playlist : z");
-    printf("\n Rename a playlist : h");
     printf("\n");
     /*------------------------------------------------------------*/
 
@@ -1152,48 +1161,6 @@ int main(int argc, char *argv[])
                    
                         continue;
 
-                        case SDLK_z:
-
-                            if(choice_playlist == NULL)
-
-                                printf("\n No playlist selection");
-
-                            else{
-
-                                fic = fopen("playlists.txt", "r");
-
-                                number_element = Take_Number_Music(music, fic);
-                           
-                                Delete_playlist(choice_playlist, fic, number_element);
-
-                                choice_playlist = NULL;
-
-                            }
-
-                        continue;
-
-                        case SDLK_h:
-
-                            if(choice_playlist == NULL)
-
-                                printf("\n No playlist selection");
-
-                            else{
-
-                                fic = fopen("playlists.txt", "r");
-
-                                number_element = Take_Number_Music(music, fic);
-
-                                rename_playlist =  List_playlist_(fic);
-
-                                Change_name(choice_playlist, rename_playlist, fic, number_element);
-
-                                strcpy(choice_playlist, rename_playlist);
-
-                            }
-
-                        continue;
-
                         default:
                         
                         continue;
@@ -1340,6 +1307,45 @@ int main(int argc, char *argv[])
            
                             Add_playlist();
 
+                        if(event.button.y <= 402 && event.button.y >= 330 && event.button.x >= 50 && event.button.x <= 200){
+           
+                            if(choice_playlist == NULL)
+
+                                printf("\n No playlist selection");
+
+                            else{
+
+                                fic = fopen("playlists.txt", "r");
+
+                                number_element = Take_Number_Music(music, fic);
+
+                                rename_playlist =  List_playlist_(fic);
+
+                                Change_name(choice_playlist, rename_playlist, fic, number_element);
+
+                                strcpy(choice_playlist, rename_playlist);
+
+                            }
+                        }
+
+                        if(event.button.y <= 487 && event.button.y >= 415 && event.button.x >= 50 && event.button.x <= 200){
+
+                            if(choice_playlist == NULL)
+
+                                printf("\n No playlist selection");
+
+                            else{
+
+                                fic = fopen("playlists.txt", "r");
+
+                                number_element = Take_Number_Music(music, fic);
+                           
+                                Delete_playlist(choice_playlist, fic, number_element);
+
+                                choice_playlist = NULL;
+
+                            }
+                        }
                     }
 
                 continue;
@@ -1360,16 +1366,17 @@ int main(int argc, char *argv[])
 
     /*------------------------------------------------------------*/
 
-    for (i = 0; i < number_element; i++) {
+    for (i = 0; i < number_element; i++){
+
+        free(tab_music[i]);
         
-        for (j = 0; j < 5; j++) {
+        for (j = 0; j < 5; j++){
         
             free(tab_music[i][j]);
 
         }
     }
 
-    free(tab_music[i]);
     free(choice_delete_music);
     free(choice_playlist);
     free(rename_playlist);
