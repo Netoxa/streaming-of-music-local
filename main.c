@@ -319,7 +319,6 @@ void Add_Genre(FILE *fic){
 
 void Add_playlist(){
  
-
     unsigned int i = 0;
     char *playlist_add = malloc(sizeof(char) * 255);
     char playlist_list[255];
@@ -343,6 +342,8 @@ void Add_playlist(){
         fclose(fic);
 
     }else{
+
+        i = 0;
 
         while(i == 0){
 
@@ -401,6 +402,8 @@ void Add_playlist(){
         fic = fopen(playlist_add, "w+");
 
         fclose(fic);
+
+        printf("\n The playlist was created");
 
     }
 }
@@ -463,11 +466,11 @@ void Image_Next_Previous(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *r
 
 void Image_Playlist(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture){
 
-    char playlist_choice[4][30] = {"images/choice_playlist.jpg","images/play_playlist.jpg"};
+    char playlist_choice[3][30] = {"images/choice_playlist.jpg","images/play_playlist.jpg","images/create_playlist.jpg"};
     unsigned int i;
     unsigned int position = 75;
 
-    for(i = 0; i < 2; i++){
+    for(i = 0; i < 3; i++){
 
         Display_Images(rectangle, window, renderer, image, texture, playlist_choice[i], position, 50);
 
@@ -907,15 +910,12 @@ int main(int argc, char *argv[])
 
     police = TTF_OpenFont("polices/ArialNova-Light.ttf", 30);
 
-    printf("\n\n Play the music list : p");
     printf("\n Restart the music list : m");
     printf("\n Pause / Replay : space ");
     printf("\n Replay the music a the begin : r");
     printf("\n Shuffle the music list : j");
     printf("\n Add a music : o");
     printf("\n Delete a music : x");
-    printf("\n Choice a playlist : c");
-    printf("\n Create a playlist : w");
     printf("\n Delete a playlist : z");
     printf("\n Rename a playlist : h");
     printf("\n");
@@ -1059,32 +1059,6 @@ int main(int argc, char *argv[])
 
                         continue;
 
-                        case SDLK_p:
-
-                            fic = fopen(choice_playlist, "r");
-                            
-                            number_element = Take_Number_Music(music, fic);
-
-                            tab_music = Take_List_Music(number_element, fic, music, images, artiste, titre, genre);
-
-                            if(choice_playlist == NULL)
-
-                                printf("\n No playlist selection");
-
-                            if(number_element == 0 && choice_playlist != NULL)
-
-                                printf("\n The playlist is empty");
-
-                            if(i == number_element && number_element > 1 && choice_playlist != NULL)
-
-                                printf("\n List of musics is finished");
-
-                            else
-
-                                lecture_check = 1;
-
-                        continue;
-
                         case SDLK_r:
 
                             if(i <= number_element) // Music must be playing
@@ -1178,20 +1152,6 @@ int main(int argc, char *argv[])
                    
                         continue;
 
-                        case SDLK_c:
-
-                            fic = fopen("playlists.txt", "r");
-
-                            choice_playlist =  List_playlist(fic);
-                
-                        continue;
-
-                        case SDLK_w:
-
-                            Add_playlist();
-
-                        continue;
-
                         case SDLK_z:
 
                             if(choice_playlist == NULL)
@@ -1205,6 +1165,8 @@ int main(int argc, char *argv[])
                                 number_element = Take_Number_Music(music, fic);
                            
                                 Delete_playlist(choice_playlist, fic, number_element);
+
+                                choice_playlist = NULL;
 
                             }
 
@@ -1225,6 +1187,8 @@ int main(int argc, char *argv[])
                                 rename_playlist =  List_playlist_(fic);
 
                                 Change_name(choice_playlist, rename_playlist, fic, number_element);
+
+                                strcpy(choice_playlist, rename_playlist);
 
                             }
 
@@ -1371,6 +1335,11 @@ int main(int argc, char *argv[])
                                 lecture_check = 1;
 
                         }
+
+                        if(event.button.y <= 317 && event.button.y >= 245 && event.button.x >= 50 && event.button.x <= 200)
+           
+                            Add_playlist();
+
                     }
 
                 continue;
