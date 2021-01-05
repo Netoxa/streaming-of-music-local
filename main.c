@@ -503,6 +503,12 @@ void Image_Down_Turn(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *rende
     }
 }
 
+void Image_Shuffle(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture){
+
+    Display_Images(rectangle, window, renderer, image, texture, "images/shuffle.jpg", 600, 350);
+    
+}
+
 char *Choice_Music(){
 
     unsigned int check = 0;
@@ -924,7 +930,6 @@ int main(int argc, char *argv[])
     printf("\n Restart the music list : m");
     printf("\n Pause / Replay : space ");
     printf("\n Replay the music a the begin : r");
-    printf("\n Shuffle the music list : j");
     printf("\n Add a music : o");
     printf("\n Delete a music : x");
     printf("\n");
@@ -972,6 +977,8 @@ int main(int argc, char *argv[])
             Image_Down_Turn(rectangle, window, renderer, image, texture);
 
             Image_Playlist(rectangle, window, renderer, image, texture);
+
+            Image_Shuffle(rectangle, window, renderer, image, texture);
                 
             texte = TTF_RenderText_Blended(police, tab_music[i][2], couleur);
 
@@ -1084,16 +1091,6 @@ int main(int argc, char *argv[])
             
                         continue;
 
-                        case SDLK_j:
-
-                            tab_music = Shuffle_music_list(tab_music, number_element, 5);
-
-                            i = 0;
-                        
-                            change_something = 1;
-
-                        continue;
-
                         case SDLK_o:
 
                             if(choice_playlist == NULL)
@@ -1171,7 +1168,7 @@ int main(int argc, char *argv[])
 
                     if (event.button.button == SDL_BUTTON_LEFT){    
                 
-                        if(event.button.x >= 475 && event.button.x <= 525 && event.button.y <= 651 && event.button.y >= 601){
+                        if(event.button.x >= 475 && event.button.x <= 525 && event.button.y <= 650 && event.button.y >= 600){
 
                             FMOD_System_GetMasterChannelGroup(system, &canal);
                             FMOD_ChannelGroup_GetPaused(canal, &etat);
@@ -1193,7 +1190,7 @@ int main(int argc, char *argv[])
                             }
                         }
 
-                        if(event.button.x >= 280 && event.button.x <= 330 && event.button.y <= 651 && event.button.y >= 601 && number_element != 0){ 
+                        if(event.button.x >= 280 && event.button.x <= 330 && event.button.y <= 650 && event.button.y >= 601 && number_element != 0){ 
                         
                             if(i == 1){ // previous music
 
@@ -1213,11 +1210,11 @@ int main(int argc, char *argv[])
 
                         }
 
-                        if(event.button.x >= 670 && event.button.x <= 720 && event.button.y <= 651 && event.button.y >= 601 && i < number_element)
+                        if(event.button.x >= 670 && event.button.x <= 720 && event.button.y <= 650 && event.button.y >= 600 && i < number_element)
                     
                             change_something = 1; // next music
 
-                        if(event.button.x >= 560 && event.button.x <= 610 && event.button.y <= 651 && event.button.y >= 601){ 
+                        if(event.button.x >= 560 && event.button.x <= 610 && event.button.y <= 650 && event.button.y >= 600){ 
      
                             if(volume_zero == 1){ // mute music
 
@@ -1239,7 +1236,7 @@ int main(int argc, char *argv[])
 
                         }
 
-                        if(event.button.y <= 651 && event.button.y >= 601 && event.button.x >= 100 && event.button.x <= 150){
+                        if(event.button.y <= 650 && event.button.y >= 600 && event.button.x >= 100 && event.button.x <= 150){
                     
                             Image_Down_Turn(rectangle, window, renderer, image, texture);
 
@@ -1254,7 +1251,7 @@ int main(int argc, char *argv[])
                             }
                         }
 
-                        if(event.button.y <= 651 && event.button.y >= 601 && event.button.x >= 180 && event.button.x <= 230){
+                        if(event.button.y <= 650 && event.button.y >= 600 && event.button.x >= 180 && event.button.x <= 230){
                     
                             Image_Down_Turn(rectangle, window, renderer, image, texture); // Up the music
 
@@ -1267,6 +1264,18 @@ int main(int argc, char *argv[])
                                 printf("\n The volume is %.0lf", volume * 10);
 
                             }
+                        }
+
+                        if(event.button.y <= 650 && event.button.y >= 600 && event.button.x >= 350 && event.button.x <= 400){
+                            
+                            tab_music = Shuffle_music_list(tab_music, number_element, 5);
+
+                            i = 0;
+                        
+                            change_something = 1;
+
+                            Image_Shuffle(rectangle, window, renderer, image, texture);
+
                         }
                 
                         if(event.button.y <= 147 && event.button.y >= 75 && event.button.x >= 50 && event.button.x <= 200){   
