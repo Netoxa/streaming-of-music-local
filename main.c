@@ -50,7 +50,6 @@ char ***Take_List_Music(int number_music, FILE *fic, char *music, char *images, 
 
     }
 
-
     for(i = 0; i < number_music; i++){
         
         for(j = 0; j < 5; j++){
@@ -89,7 +88,6 @@ char ***Shuffle_music_list(char ***tab_music, int number_music, int cols){
 
     unsigned int i;
     unsigned int j;
-    
     int position_music_one;
     int position_music_two;
     char music_one[255];
@@ -146,9 +144,9 @@ char ***Shuffle_music_list(char ***tab_music, int number_music, int cols){
 
 void Add_Music(FILE *fic){
 
-
     unsigned int check = 0;
     char music_add[255];
+    unsigned int check_space = 0;
     char path[255] = "sons/";
 
     printf("\n Enter the name of the music (Size between 1 and 50) : ");
@@ -160,16 +158,35 @@ void Add_Music(FILE *fic){
         if(music_add[strlen(music_add) - 1] == '\n')
             music_add[strlen(music_add) - 1] = '\0';
 
-        if(strlen(music_add) > 50 || strlen(music_add) < 1){
+        for(check_space = 0; check_space < strlen(music_add); check_space++){
 
-            printf("\n Wrong size");
+            if(music_add[check_space] == 32){
 
-        }else{
+                check_space = 2;
 
-            check = 1;
+                break;
+
+            }
 
         }
 
+        if(check_space != 2){
+
+            if(strlen(music_add) > 50 || strlen(music_add) < 1){
+
+                printf("\n Wrong size\n");
+
+            }else{
+
+                check = 1;
+
+            }
+
+        }else{
+
+            printf("\n There is a space\n");
+
+        }
     }
 
     fseek(fic, 0, SEEK_END); 
@@ -191,6 +208,7 @@ void Add_Image(FILE *fic){
     unsigned int check = 0;
     char image_add[255];
     char path[255] = "images/";
+    unsigned int check_space = 0;
 
     printf("\n Enter the name of the image (Size between 1 and 50) : ");
 
@@ -201,16 +219,35 @@ void Add_Image(FILE *fic){
         if(image_add[strlen(image_add) - 1] == '\n')
             image_add[strlen(image_add) - 1] = '\0';
 
-        if(strlen(image_add) > 50 || strlen(image_add) < 1){
+        for(check_space = 0; check_space < strlen(image_add); check_space++){
 
-            printf("\n Wrong size");
+            if(image_add[check_space] == 32){
 
-        }else{
+                check_space = 2;
 
-            check = 1;
+                break;
+
+            }
 
         }
 
+        if(check_space != 2){
+
+            if(strlen(image_add) > 50 || strlen(image_add) < 1){
+
+                printf("\n Wrong size\n");
+
+            }else{
+
+                check = 1;
+
+            }
+
+        }else{
+
+            printf("\n There is a space\n");
+
+        }
     }
 
     fseek(fic, 0, SEEK_END); 
@@ -224,6 +261,7 @@ void Add_Artist(FILE *fic){
 
     unsigned int check = 0;
     char artist_add[255];
+    unsigned int check_space = 0;
 
     printf("\n Enter the name of the artist (Size between 1 and 50) : ");
 
@@ -234,16 +272,35 @@ void Add_Artist(FILE *fic){
         if(artist_add[strlen(artist_add) - 1] == '\n')
             artist_add[strlen(artist_add) - 1] = '\0';
 
-        if(strlen(artist_add) > 50 || strlen(artist_add) < 1){
+        for(check_space = 0; check_space < strlen(artist_add); check_space++){
 
-            printf("\n Wrong size");
+            if(artist_add[check_space] == 32){
 
-        }else{
+                check_space = 2;
 
-            check = 1;
+                break;
+
+            }
 
         }
 
+        if(check_space != 2){
+
+            if(strlen(artist_add) > 50 || strlen(artist_add) < 1){
+
+                printf("\n Wrong size\n");
+
+            }else{
+
+                check = 1;
+
+            }
+
+        }else{
+
+            printf("\n There is a space\n");
+
+        }
     }
 
     fseek(fic, 0, SEEK_END); 
@@ -254,9 +311,9 @@ void Add_Artist(FILE *fic){
 
 void Add_Title(FILE *fic){
 
-
     unsigned int check = 0;
     char title_add[255];
+    unsigned int check_space = 0;
 
     printf("\n Enter the name of the title (Size between 1 and 50) : ");
 
@@ -267,13 +324,33 @@ void Add_Title(FILE *fic){
         if(title_add[strlen(title_add) - 1] == '\n')
             title_add[strlen(title_add) - 1] = '\0';
 
-        if(strlen(title_add) > 50 || strlen(title_add) < 1){
+        for(check_space = 0; check_space < strlen(title_add); check_space++){
 
-            printf("\n Wrong size");
+            if(title_add[check_space] == 32){
+
+                check_space = 2;
+
+                break;
+
+            }
+
+        }
+
+        if(check_space != 2){
+
+            if(strlen(title_add) > 50 || strlen(title_add) < 1){
+
+                printf("\n Wrong size\n");
+
+            }else{
+
+                check = 1;
+
+            }
 
         }else{
 
-            check = 1;
+            printf("\n There is a space\n");
 
         }
 
@@ -282,13 +359,14 @@ void Add_Title(FILE *fic){
     fseek(fic, 0, SEEK_END); 
 
     fprintf(fic, " %s", title_add);
- //fclose(fic);
+
 }
 
 void Add_Genre(FILE *fic){
 
     unsigned int check = 0;
     char genre_add[255];
+    unsigned int check_space = 0;
 
     printf("\n Enter the name of the genre (Size between 1 and 50) : ");
 
@@ -300,13 +378,35 @@ void Add_Genre(FILE *fic){
 
             genre_add[strlen(genre_add) - 1] = '\0';
 
-        if(strlen(genre_add) > 50 || strlen(genre_add) < 1)
+        for(check_space = 0; check_space < strlen(genre_add); check_space++){
 
-            printf("\n Wrong size");
+            if(genre_add[check_space] == 32){
 
-        else
+                check_space = 2;
 
-            check = 1;
+                break;
+
+            }
+
+        }
+
+        if(check_space != 2){
+
+            if(strlen(genre_add) > 50 || strlen(genre_add) < 1){
+
+                printf("\n Wrong size\n");
+
+            }else{
+
+                check = 1;
+
+            }
+
+        }else{
+
+            printf("\n There is a space\n");
+
+        }
 
     }
 
@@ -509,6 +609,13 @@ void Image_Shuffle(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *rendere
     
 }
 
+void Image_Replay(SDL_Rect rectangle, SDL_Window *window, SDL_Renderer *renderer, SDL_Surface *image, SDL_Texture *texture){
+
+    Display_Images(rectangle, window, renderer, image, texture, "images/replay.jpg", 600, 410);
+    
+
+}
+
 char *Choice_Music(){
 
     unsigned int check = 0;
@@ -644,7 +751,7 @@ char *List_playlist(FILE *fic){
     
     while(fgets(playlist, 255, fic) != NULL){
 
-        printf("\n %s", playlist);
+        printf(" %s\n", playlist);
 
         i++;
 
@@ -880,6 +987,8 @@ int main(int argc, char *argv[])
     SDL_Color couleur = {25, 31, 29};
     
     TTF_Font *police = NULL;
+    TTF_Font *police2 = NULL;
+    TTF_Font *police3 = NULL;
 
     FMOD_BOOL etat = 0;
     FMOD_BOOL etat_musique = 0;
@@ -908,6 +1017,7 @@ int main(int argc, char *argv[])
     char *choice_playlist = NULL;
     char *rename_playlist = NULL;
     FILE *fic;
+    unsigned int position;
 
     /* Launch SDL */
     if(SDL_Init(SDL_INIT_VIDEO) != 0)
@@ -927,9 +1037,12 @@ int main(int argc, char *argv[])
 
     police = TTF_OpenFont("polices/ArialNova-Light.ttf", 30);
 
+    police2 = TTF_OpenFont("polices/ArialNova-Light.ttf", 18);
+
+    police3 = TTF_OpenFont("polices/arlrdbd.ttf", 18);
+
     printf("\n Restart the music list : m");
     printf("\n Pause / Replay : space ");
-    printf("\n Replay the music a the begin : r");
     printf("\n Add a music : o");
     printf("\n Delete a music : x");
     printf("\n");
@@ -979,6 +1092,82 @@ int main(int argc, char *argv[])
             Image_Playlist(rectangle, window, renderer, image, texture);
 
             Image_Shuffle(rectangle, window, renderer, image, texture);
+
+            Image_Replay(rectangle, window, renderer, image, texture);
+
+            position = 147;
+
+            for(j = 0; j < number_element; j++){
+
+                if(strcmp(tab_music[i][2], tab_music[j][2]) != 0){
+
+                    texte = TTF_RenderText_Blended(police2, tab_music[j][2], couleur);
+
+                    if(texte == NULL){
+                        SDL_DestroyRenderer(renderer);
+                        SDL_DestroyWindow(window);
+                        SDL_ExitWithError("Impossible to load the text");
+                    }
+
+                    texture = SDL_CreateTextureFromSurface(renderer, texte);
+
+                    SDL_FreeSurface(texte);
+
+                    if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
+                        SDL_DestroyRenderer(renderer);
+                        SDL_DestroyWindow(window);
+                        SDL_ExitWithError("Impossible to load the texture");
+                    }
+
+                    rectangle.x = 750;
+                    rectangle.y = position;
+
+                    if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
+                        SDL_DestroyRenderer(renderer);
+                        SDL_DestroyWindow(window);
+                        SDL_ExitWithError("Impossible to display the texture");
+                    }
+
+                    SDL_RenderPresent(renderer);
+
+                }
+
+                if(strcmp(tab_music[i][2], tab_music[j][2]) == 0){
+
+                    texte = TTF_RenderText_Blended(police3, tab_music[j][2], couleur);
+
+                    if(texte == NULL){
+                        SDL_DestroyRenderer(renderer);
+                        SDL_DestroyWindow(window);
+                        SDL_ExitWithError("Impossible to load the text");
+                    }
+
+                    texture = SDL_CreateTextureFromSurface(renderer, texte);
+
+                    SDL_FreeSurface(texte);
+
+                    if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
+                        SDL_DestroyRenderer(renderer);
+                        SDL_DestroyWindow(window);
+                        SDL_ExitWithError("Impossible to load the texture");
+                    }
+
+                    rectangle.x = 750;
+                    rectangle.y = position;
+
+                    if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
+                        SDL_DestroyRenderer(renderer);
+                        SDL_DestroyWindow(window);
+                        SDL_ExitWithError("Impossible to display the texture");
+                    }
+
+                    SDL_RenderPresent(renderer);
+
+                }
+
+                position += 20;
+
+            }
                 
             texte = TTF_RenderText_Blended(police, tab_music[i][2], couleur);
 
@@ -998,7 +1187,7 @@ int main(int argc, char *argv[])
             }
 
             rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
-            rectangle.y = 690;
+            rectangle.y = 670;
 
             if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
                 SDL_DestroyRenderer(renderer);
@@ -1026,7 +1215,35 @@ int main(int argc, char *argv[])
             }
 
             rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
-            rectangle.y = 730;
+            rectangle.y = 710;
+
+            if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
+                SDL_DestroyRenderer(renderer);
+                SDL_DestroyWindow(window);
+                SDL_ExitWithError("Impossible to display the texture");
+            }
+
+            SDL_RenderPresent(renderer);
+
+            texte = TTF_RenderText_Blended(police,  tab_music[i][4], couleur);
+
+            if(texte == NULL){
+                SDL_DestroyRenderer(renderer);
+                SDL_DestroyWindow(window);
+                SDL_ExitWithError("Impossible to load the text");
+            }
+
+            texture = SDL_CreateTextureFromSurface(renderer, texte);
+            SDL_FreeSurface(texte);
+
+            if(SDL_QueryTexture(texture, NULL, NULL, &rectangle.w, &rectangle.h) != 0){
+                SDL_DestroyRenderer(renderer);
+                SDL_DestroyWindow(window);
+                SDL_ExitWithError("Impossible to load the texture");
+            }
+
+            rectangle.x = (WINDOW_WIDTH - rectangle.w) / 2;
+            rectangle.y = 740;
 
             if(SDL_RenderCopy(renderer, texture, NULL, &rectangle) != 0){
                 SDL_DestroyRenderer(renderer);
@@ -1075,14 +1292,6 @@ int main(int argc, char *argv[])
 
                         continue;
 
-                        case SDLK_r:
-
-                            if(i <= number_element) // Music must be playing
-
-                                FMOD_System_PlaySound(system, FMOD_CHANNEL_FREE, musique, 0, &channel);
-
-                        continue;
-
                         case SDLK_m:
 
                             i = 0; // Return the list to the beginning
@@ -1098,25 +1307,34 @@ int main(int argc, char *argv[])
                                 printf("\n No playlist selection");
 
                             else{
-                        
-                                fic = fopen(choice_playlist, "a+");
-
-                                Add_Music(fic);
-                                Add_Image(fic);
-                                Add_Artist(fic);
-                                Add_Title(fic);
-                                Add_Genre(fic);
-
-                                fclose(fic);
-                                                  
-                                fic = fopen(choice_playlist, "r");
 
                                 number_element = Take_Number_Music(music, fic);
-    
-                                tab_music = Take_List_Music(number_element, fic, music, images, artiste, titre, genre);
-                            
-                                fclose(fic);
 
+                                if(number_element < 10){
+                        
+                                    fic = fopen(choice_playlist, "a+");
+
+                                    Add_Music(fic);
+                                    Add_Image(fic);
+                                    Add_Artist(fic);
+                                    Add_Title(fic);
+                                    Add_Genre(fic);
+
+                                    fclose(fic);
+                                                  
+                                    fic = fopen(choice_playlist, "r");
+
+                                    number_element = Take_Number_Music(music, fic);
+    
+                                    tab_music = Take_List_Music(number_element, fic, music, images, artiste, titre, genre);
+                            
+                                    fclose(fic);
+
+                                }else{
+
+                                    printf("Maximum musics reached");
+
+                                }
                             }
 
                         continue;
@@ -1277,6 +1495,16 @@ int main(int argc, char *argv[])
                             Image_Shuffle(rectangle, window, renderer, image, texture);
 
                         }
+
+                        if(event.button.y <= 650 && event.button.y >= 600 && event.button.x >= 410 && event.button.x <= 460){
+
+                            Image_Replay(rectangle, window, renderer, image, texture);
+
+                            i--;
+
+                            change_something = 1;
+
+                        }
                 
                         if(event.button.y <= 147 && event.button.y >= 75 && event.button.x >= 50 && event.button.x <= 200){   
 
@@ -1315,6 +1543,7 @@ int main(int argc, char *argv[])
                         if(event.button.y <= 317 && event.button.y >= 245 && event.button.x >= 50 && event.button.x <= 200)
            
                             Add_playlist();
+                            
 
                         if(event.button.y <= 402 && event.button.y >= 330 && event.button.x >= 50 && event.button.x <= 200){
            
@@ -1355,6 +1584,7 @@ int main(int argc, char *argv[])
 
                             }
                         }
+
                     }
 
                 continue;
@@ -1389,8 +1619,8 @@ int main(int argc, char *argv[])
     free(choice_delete_music);
     free(choice_playlist);
     free(rename_playlist);
-
     free(tab_music);
+
     FMOD_Sound_Release(musique);
     FMOD_System_Close(system);
     FMOD_System_Release(system);

@@ -1,0 +1,4 @@
+Le travail a été fait sur le PC de Bastien en binôme. Nous avons utilisé git après avoir eu les cours.
+Lien github : https://github.com/Netoxa/encryption_decryption
+Le temps passé est évalué entre 40 et 50 heures
+Le plus dur a été d'apprendre les librairies utilisées

@@ -27,3 +27,4 @@ Autres :
 
     Manipuler les fichiers textes directement en qu'a d'extreme nécessité
     10 playlists maximums
+    10 musiques maximums par playlist
